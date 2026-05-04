@@ -1,0 +1,7 @@
+datasets
+pandas
+scikit-learn
+networkx
+statsmodels
+spacy
+transformers
