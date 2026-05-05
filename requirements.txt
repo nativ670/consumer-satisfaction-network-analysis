@@ -5,4 +5,10 @@ networkx
 statsmodels
 spacy
 transformers
+torch
+tqdm
 numpy
+sentence-transformers
+sentencepiece
+tiktoken
+protobuf
