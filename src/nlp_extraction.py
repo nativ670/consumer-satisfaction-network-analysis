@@ -1,10 +1,12 @@
 import pandas as pd
 import spacy
 from transformers import pipeline
+from transformers.pipelines.pt_utils import KeyDataset
 from sentence_transformers import SentenceTransformer, util
 import logging
 from tqdm import tqdm
 import torch
+from datasets import Dataset
 from src.data_preprocessing import load_and_clean_data
 
 # Configure logging
@@ -113,43 +115,34 @@ def extract_aspects_and_sentiments(df: pd.DataFrame) -> pd.DataFrame:
         df['aspect_sentiments'] = [[] for _ in range(len(df))]
         return df
 
-    # Step 4: Batch score sentiment for mapped aspects
+    # Step 4: Batch score sentiment for mapped aspects using Dataset for efficiency
     logger.info(f"Running ABSA on {len(absa_inputs)} aspect-sentence pairs...")
-    absa_scores = []
     
-    # Process ABSA in mini-batches to show progress and avoid memory spikes
-    ABSA_BATCH_SIZE = 32 if device_idx >= 0 else 8
-    for j in tqdm(range(0, len(absa_inputs), ABSA_BATCH_SIZE), desc="Sentiment Analysis"):
-        batch_inputs = absa_inputs[j : j + ABSA_BATCH_SIZE]
+    # To handle sequence pairs with Dataset and Pipeline (streaming), we pre-format the inputs.
+    # Most ABSA models accept 'sentence [SEP] aspect' as input.
+    # We use the pipeline's tokenizer to get the correct separator.
+    sep = absa_pipeline.tokenizer.sep_token
+    formatted_inputs = [f"{inp['text']} {sep} {inp['text_pair']}" for inp in absa_inputs]
+    
+    # Create the Dataset object as requested
+    hf_dataset = Dataset.from_dict({"text": formatted_inputs})
+    
+    absa_scores = []
+    # Use KeyDataset to yield individual strings from the dataset to the pipeline.
+    # This enables the pipeline's internal batching and streaming.
+    for output in tqdm(absa_pipeline(KeyDataset(hf_dataset, "text"), batch_size=32), total=len(hf_dataset), desc="Sentiment Analysis"):
         try:
-            batch_outputs = absa_pipeline(batch_inputs)
+            # Handle the output structure (top_k=None returns a list of dictionaries for each input)
+            if isinstance(output, dict):
+                output = [output]
             
-            # Normalize outputs to List[List[Dict]]
-            if isinstance(batch_outputs, dict): batch_outputs = [[batch_outputs]]
-            elif isinstance(batch_outputs, list) and len(batch_outputs) > 0 and isinstance(batch_outputs[0], dict):
-                # If top_k=None returns List[Dict] for multiple inputs (happens in some versions/configs)
-                # But typically top_k=None returns List[List[Dict]] for multiple inputs.
-                # Let's verify by looking at the first element.
-                # If it's a list, we're good. If it's a dict, we need to wrap each.
-                if isinstance(batch_outputs[0], dict):
-                    # Check if it's a single input result or multiple
-                    # Actually, if we passed a list, it should be multiple.
-                    # This happens if top_k is NOT None, but we set top_k=None.
-                    # We'll assume the standard Transformer behavior for top_k=None.
-                    pass # Handled below
-            
-            for output in batch_outputs:
-                # Ensure output is a list of results for that input
-                if isinstance(output, dict): output = [output]
-                
-                scores_dict = {res['label'].lower(): res['score'] for res in output}
-                pos_prob = scores_dict.get('positive', 0.0)
-                neg_prob = scores_dict.get('negative', 0.0)
-                absa_scores.append(pos_prob - neg_prob)
+            scores_dict = {res['label'].lower(): res['score'] for res in output}
+            pos_prob = scores_dict.get('positive', 0.0)
+            neg_prob = scores_dict.get('negative', 0.0)
+            absa_scores.append(pos_prob - neg_prob)
         except Exception as e:
-            logger.warning(f"Error in ABSA batch: {e}")
-            # Fill with neutral scores for failed batch
-            absa_scores.extend([0.0] * len(batch_inputs))
+            logger.warning(f"Error processing ABSA output: {e}")
+            absa_scores.append(0.0) # Neutral fallback
 
     # Step 5: Reassemble results back to reviews
     logger.info("Reassembling results...")
