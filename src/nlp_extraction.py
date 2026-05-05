@@ -72,7 +72,7 @@ def extract_aspects_and_sentiments(df: pd.DataFrame) -> pd.DataFrame:
     
     results = []
     # Threshold for mapping raw terms to core aspects (MiniLM cosine similarity)
-    SIMILARITY_THRESHOLD = 0.5 
+    SIMILARITY_THRESHOLD = 0.35
     
     for text in tqdm(df['text'], desc="Processing reviews"):
         if not isinstance(text, str) or not text.strip():
