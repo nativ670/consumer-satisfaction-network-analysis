@@ -34,7 +34,15 @@ def prepare_modeling_data(df):
     # 3. Drop rows with missing rating (should be none due to cleaning, but safe)
     feature_matrix = feature_matrix.dropna(subset=['rating'])
     
-    # 4. Mean Center the base sentiment columns
+    # 4. Methodological Filtering: Drop rows with 0.0 across all CORE_ASPECTS (Sparsity Filter)
+    initial_count = len(feature_matrix)
+    mask = (feature_matrix[CORE_ASPECTS] != 0.0).any(axis=1)
+    feature_matrix = feature_matrix[mask].copy()
+    
+    dropped_count = initial_count - len(feature_matrix)
+    logger.info(f"Sparsity Filter: Dropped {dropped_count} empty reviews. Remaining valid reviews: {len(feature_matrix)}")
+    
+    # 5. Mean Center the base sentiment columns
     # We keep the original names for now, will sanitize for statsmodels later
     base_features = CORE_ASPECTS
     for col in base_features:
