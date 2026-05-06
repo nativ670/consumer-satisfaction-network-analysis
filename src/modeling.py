@@ -155,10 +155,13 @@ def compare_models(df, G):
         print(f"{name:<15} | {m['RMSE']:<12.4f} | {m['AdjR2']:<12.4f} | {m['AIC']:<12.1f} | {m['BIC']:<12.1f}")
     print("="*70)
     
+    print("\nBASELINE MODEL SUMMARY (Full Dataset):")
+    print(sm_model1.summary())
+
     print("\nNETWORK MODEL SUMMARY (Full Dataset):")
     print(sm_model2.summary())
     
-    return sm_model2
+    return {"baseline": sm_model1, "network": sm_model2}
 
 if __name__ == "__main__":
     try:

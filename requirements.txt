@@ -12,3 +12,6 @@ sentence-transformers
 sentencepiece
 tiktoken
 protobuf
+matplotlib
+seaborn
+scipy
