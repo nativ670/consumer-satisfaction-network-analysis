@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumer Cognitive Trade-off Network</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        #graph-container {
+            width: 90vw;
+            height: 90vh;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 8px 12px;
+            font-size: 14px;
+            background: rgba(33, 37, 41, 0.95);
+            color: white;
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .node circle {
+            fill: #4c78a8;
+            stroke: #fff;
+            stroke-width: 2px;
+            transition: fill 0.2s;
+            cursor: grab;
+        }
+        .node:active circle {
+            cursor: grabbing;
+        }
+        .node text {
+            font-size: 13px;
+            font-weight: 600;
+            fill: #2c3e50;
+            pointer-events: none;
+            text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+        }
+        .link {
+            stroke: #e74c3c;
+            stroke-opacity: 0.6;
+            transition: stroke-opacity 0.2s;
+        }
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            color: #2c3e50;
+        }
+        .title h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .title p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+<div id="graph-container">
+    <div class="title">
+        <h1>Cognitive Trade-off Network</h1>
+        <p>Node Size = PageRank (Anchors) | Edge Thickness = Compensatory Effect</p>
+    </div>
+    <div id="tooltip" class="tooltip"></div>
+</div>
+
+<script>
+    // 1. Data State (Based strictly on user's Seminar Data)
+    const nodesData = [
+        { id: "Ingredients", pageRank: 0.2434 },
+        { id: "Packaging", pageRank: 0.2027 },
+        { id: "Price/Value", pageRank: 0.1363 },
+        { id: "Service/Shipping", pageRank: 0.1095 },
+        { id: "Smell/Fragrance", pageRank: 0.1092 },
+        { id: "Effectiveness/Results", pageRank: 0.1021 },
+        { id: "Texture/Consistency", pageRank: 0.0969 }
+    ];
+
+    const linksData = [
+        { source: "Smell/Fragrance", target: "Texture/Consistency", value: 0.59 },
+        { source: "Smell/Fragrance", target: "Packaging", value: 0.44 },
+        { source: "Smell/Fragrance", target: "Ingredients", value: 0.66 },
+        { source: "Price/Value", target: "Packaging", value: 0.66 },
+        { source: "Price/Value", target: "Ingredients", value: 0.75 },
+        { source: "Price/Value", target: "Effectiveness/Results", value: 0.60 },
+        { source: "Price/Value", target: "Service/Shipping", value: 0.56 },
+        { source: "Texture/Consistency", target: "Packaging", value: 0.39 },
+        { source: "Texture/Consistency", target: "Ingredients", value: 0.57 },
+        { source: "Texture/Consistency", target: "Effectiveness/Results", value: 0.54 },
+        { source: "Packaging", target: "Ingredients", value: 0.44 },
+        { source: "Packaging", target: "Effectiveness/Results", value: 0.51 },
+        { source: "Packaging", target: "Service/Shipping", value: 0.38 },
+        { source: "Ingredients", target: "Effectiveness/Results", value: 0.72 },
+        { source: "Ingredients", target: "Service/Shipping", value: 0.47 }
+    ];
+
+    // 2. Setup SVG Canvas
+    const container = document.getElementById('graph-container');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const svg = d3.select("#graph-container").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    const tooltip = d3.select("#tooltip");
+
+    // 3. Scales
+    // Map PageRank (0.09 to 0.25) to Node Radius (20 to 55)
+    const radiusScale = d3.scaleSqrt()
+        .domain([0.09, 0.25])
+        .range([20, 55]);
+
+    // Map Compensatory Value (0.38 to 0.75) to Link Thickness (2 to 12)
+    const linkScale = d3.scaleLinear()
+        .domain([0.38, 0.75])
+        .range([2, 12]);
+
+    // 4. Force Simulation
+    const simulation = d3.forceSimulation(nodesData)
+        .force("link", d3.forceLink(linksData).id(d => d.id).distance(200))
+        .force("charge", d3.forceManyBody().strength(-800))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collide", d3.forceCollide().radius(d => radiusScale(d.pageRank) + 15).iterations(2));
+
+    // 5. Draw Links
+    const link = svg.append("g")
+        .selectAll("line")
+        .data(linksData)
+        .enter().append("line")
+        .attr("class", "link")
+        .attr("stroke-width", d => linkScale(d.value))
+        .on("mouseover", (event, d) => {
+            tooltip.transition().duration(200).style("opacity", .9);
+            tooltip.html(`<b>Compensatory Penalty:</b> -${d.value}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", () => {
+            tooltip.transition().duration(500).style("opacity", 0);
+        });
+
+    // 6. Draw Nodes
+    const node = svg.append("g")
+        .selectAll("g")
+        .data(nodesData)
+        .enter().append("g")
+        .attr("class", "node")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    // Add circles to nodes
+    node.append("circle")
+        .attr("r", d => radiusScale(d.pageRank))
+        .on("mouseover", function(event, d) {
+            // Highlight specific node
+            d3.select(this).style("fill", "#2980b9");
+            
+            // Show Tooltip
+            tooltip.transition().duration(200).style("opacity", .9);
+            tooltip.html(`<b>${d.id}</b><br>PageRank: ${d.pageRank}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+
+            // Fade unlinked nodes and links
+            const linkedNodes = new Set();
+            linkedNodes.add(d.id);
+            link.style("stroke-opacity", l => {
+                if (l.source.id === d.id || l.target.id === d.id) {
+                    linkedNodes.add(l.source.id);
+                    linkedNodes.add(l.target.id);
+                    return 0.8;
+                }
+                return 0.1;
+            });
+
+            node.style("opacity", n => linkedNodes.has(n.id) ? 1 : 0.1);
+        })
+        .on("mouseout", function(event, d) {
+            // Reset styles
+            d3.select(this).style("fill", "#4c78a8");
+            tooltip.transition().duration(500).style("opacity", 0);
+            link.style("stroke-opacity", 0.6);
+            node.style("opacity", 1);
+        });
+
+    // Add text labels to nodes
+    node.append("text")
+        .attr("dy", d => radiusScale(d.pageRank) + 15)
+        .attr("text-anchor", "middle")
+        .text(d => d.id);
+
+    // 7. Simulation Ticks
+    simulation.on("tick", () => {
+        link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+
+        node
+            .attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    // 8. Drag Functions
+    function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+    function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+    }
+    function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+</script>
+</body>
+</html>
