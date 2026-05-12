@@ -1,0 +1,76 @@
+# Cognitive Networks in Customer Satisfaction: An ABSA & GLASSO Approach
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![Pandas](https://img.shields.io/badge/Pandas-Data_Manipulation-green)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Machine_Learning-orange)
+![Statsmodels](https://img.shields.io/badge/Statsmodels-Statistical_Modeling-red)
+![D3.js](https://img.shields.io/badge/D3.js-Data_Visualization-F9A03C)
+
+## 📌 Project Overview
+This repository contains the code and data pipeline for an academic seminar project investigating consumer psychology and decision-making. 
+
+**Theoretical Question:** *Do individuals judge experiences based on isolated, independent features, or do they rely on complex behavioral schemas driven by significant trade-offs (interactions) between these features?*
+
+Using **Aspect-Based Sentiment Analysis (ABSA)** on hundreds of thousands of Amazon reviews, and applying **Graphical Lasso (GLASSO)** network modeling, this project provides empirical evidence that consumers utilize a cognitive network to evaluate products. Instead of a full additive calculation, the human brain utilizes an **Accuracy-Effort Tradeoff** (Bounded Rationality), relying on specific compensatory heuristics.
+
+## 📊 Key Findings
+We compared three Ordinary Least Squares (OLS) regression models predicting overall rating (1-5 stars) based on 7 core product attributes:
+1. **Baseline Additive Model:** Main effects only.
+2. **GLASSO Network Model:** Main effects + 15 sparse interaction terms dictated by the Graphical Lasso network topology.
+3. **Full 'Kitchen-Sink' Model:** Main effects + all 21 possible interaction terms.
+
+**Statistical Results:**
+* **Baseline:** $R^2 = 0.3353$ | BIC = $1,039,391$
+* **GLASSO (15 Edges):** $R^2 = 0.3497$ | BIC = $1,032,536$
+* **Kitchen Sink (21 Edges):** $R^2 = 0.3506$ | BIC = $1,032,123$
+
+**Scientific Conclusion:** Adding network interactions drastically improves model fit compared to the Baseline model (a massive drop of ~6,800 BIC points). However, when comparing the 15-edge GLASSO network to the saturated 21-edge Kitchen Sink model, the 6 additional edges yield a $0.09\%$ increase in $R^2$. 
+
+## 💾 Dataset
+The project utilizes the **Amazon Reviews 2023** dataset (McAuley Lab), specifically focusing on the Beauty domain.
+- **Size:** ~322,000 processed reviews.
+- **Features Extracted:** 'ingredients', 'packaging', 'price/value', 'service/shipping', 'smell/fragrance', 'effectiveness/results', 'texture/consistency'.
+
+## 🗂️ Repository Structure
+
+The project is structured following professional Data Science standards, separating heavy Data Engineering (NLP) from Data Analysis:
+
+```text
+├── data/
+│   ├── Seminar_Amazon_Results_FULL.csv          # Pre-processed output (Not tracked in git if too large)
+├── src/
+│   ├── data_preprocessing.py                    # Data loading and cleaning
+│   ├── nlp_extraction.py                        # Aspect-Based Sentiment Extraction (LLM/Transformers)
+│   ├── network_builder.py                       # GLASSO implementation and centrality metrics
+│   ├── modeling.py                              # Statsmodels OLS Regression logic
+│   └── evaluation.py                            # Plotting and Likelihood Ratio tests
+├── notebooks/
+│   ├── 01_End_to_End_NLP_and_Modeling.ipynb     # Full pipeline (NLP -> CSV -> Modeling)
+│   ├── 02_Fast_Modeling_Colab_Drive.ipynb       # Modeling from Drive CSV (Skips NLP)
+│   └── 03_Fast_Modeling_Local.ipynb             # Modeling from local CSV (Skips NLP)
+├── visualizations/
+│   └── network.html                             # Interactive D3.js cognitive network visualization
+└── README.md
+```
+
+## 🚀 How to Run
+
+1. **Clone the repository:**
+   ```bash
+    git clone [https://github.com/nativ670/consumer-satisfaction-network-analysis.git](https://github.com/nativ670/consumer-satisfaction-network-analysis.git)   cd YourRepositoryName
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run the Analysis:**
+   - If you want to re-run the entire pipeline including the heavy NLP feature extraction, use `notebooks/01_End_to_End_NLP_and_Modeling.ipynb` (GPU recommended).
+   - If you already have the processed dataset (`Seminar_Amazon_Results_FULL.csv`) inside the `data/` folder, open and run `notebooks/03_Fast_Modeling_Local.ipynb` for an instant statistical evaluation and visualization.
+   - To interact with the cognitive network graph (powered by D3.js), simply open `visualizations/network.html` in any modern web browser.
+
+## 🛠️ Methodology Highlights
+1. **Mean-Centering:** All sentiment variables were strictly mean-centered prior to interaction multiplication to eliminate structural multicollinearity (VIF control).
+2. **Feature Selection (GLASSO):** An automatic $\lambda$ penalty was utilized to construct the partial-correlation matrix, pruning noisy/indirect interactions.
+3. **Compensatory Penalty:** *Every single interaction coefficient* generated by the GLASSO model is strictly **negative** (ranging from $-0.379$ to $-0.748$). This mathematically proves the compensatory nature of the consumer mindset: high satisfaction in a core trait significantly reduces the penalty of a flaw in another.
