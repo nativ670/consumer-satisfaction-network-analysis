@@ -57,7 +57,7 @@ The project is structured following professional Data Science standards, separat
 
 1. **Clone the repository:**
    ```bash
-    git clone [https://github.com/nativ670/consumer-satisfaction-network-analysis.git](https://github.com/nativ670/consumer-satisfaction-network-analysis.git)   cd YourRepositoryName
+    git clone [https://github.com/nativ670/consumer-satisfaction-network-analysis.git](https://github.com/nativ670/consumer-satisfaction-network-analysis.git)
     cd consumer-satisfaction-network-analysis
    ```
 
