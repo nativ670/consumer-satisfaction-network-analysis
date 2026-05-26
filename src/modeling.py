@@ -7,23 +7,27 @@ from sklearn.model_selection import KFold, cross_val_score
 from sklearn.metrics import mean_squared_error, r2_score
 from src.data_preprocessing import load_and_clean_data
 from src.nlp_extraction import extract_aspects_and_sentiments, CORE_ASPECTS
-from src.network_builder import build_and_analyze_network, pivot_aspect_sentiments
+from src.network_builder import (
+    build_and_analyze_network, 
+    pivot_aspect_sentiments, 
+    construct_partial_correlation_network
+)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def prepare_modeling_data(df):
+def prepare_raw_modeling_data(df):
     """
-    Pivots sentiments, centers them, and prepares the target variable.
+    Pivots sentiments and prepares the target variable without centering.
     
     Args:
         df (pd.DataFrame): DataFrame with 'aspect_sentiments' and 'rating'.
         
     Returns:
-        pd.DataFrame: A DataFrame with centered base features and 'rating'.
+        pd.DataFrame: A DataFrame with raw base features and 'rating'.
     """
-    logger.info("Pivoting and centering sentiment features...")
+    logger.info("Pivoting raw sentiment features...")
     
     # 1. Pivot sentiments
     feature_matrix = pivot_aspect_sentiments(df)
@@ -31,7 +35,7 @@ def prepare_modeling_data(df):
     # 2. Add rating
     feature_matrix['rating'] = df['rating'].values
     
-    # 3. Drop rows with missing rating (should be none due to cleaning, but safe)
+    # 3. Drop rows with missing rating
     feature_matrix = feature_matrix.dropna(subset=['rating'])
     
     # 4. Methodological Filtering: Drop rows with 0.0 across all CORE_ASPECTS (Sparsity Filter)
@@ -42,10 +46,16 @@ def prepare_modeling_data(df):
     dropped_count = initial_count - len(feature_matrix)
     logger.info(f"Sparsity Filter: Dropped {dropped_count} empty reviews. Remaining valid reviews: {len(feature_matrix)}")
     
-    # 5. Mean Center the base sentiment columns
-    # We keep the original names for now, will sanitize for statsmodels later
-    base_features = CORE_ASPECTS
-    for col in base_features:
+    return feature_matrix
+
+def prepare_modeling_data(df):
+    """
+    Legacy wrapper that pivots and centers sentiments.
+    """
+    feature_matrix = prepare_raw_modeling_data(df)
+    
+    # Mean Center the base sentiment columns
+    for col in CORE_ASPECTS:
         feature_matrix[f"{col}_centered"] = feature_matrix[col] - feature_matrix[col].mean()
         
     return feature_matrix
@@ -80,46 +90,101 @@ def calculate_adjusted_r2(r2, n, p):
         return 0
     return 1 - (1 - r2) * (n - 1) / (n - p - 1)
 
-def run_5fold_cv(X, y):
-    """Runs 5-Fold CV and returns average RMSE and R-squared."""
+def run_bulletproof_cv(df):
+    """
+    Performs leakage-free cross-validation by:
+    1. Scaling/Centering on train folds only.
+    2. Discovering Network topology (GLASSO) on train folds only.
+    3. Evaluating both OLS models on unseen test folds.
+    
+    Args:
+        df (pd.DataFrame): DataFrame with 'aspect_sentiments' and 'rating'.
+        
+    Returns:
+        tuple: (baseline_metrics, network_metrics)
+    """
+    raw_data = prepare_raw_modeling_data(df)
+    
     kf = KFold(n_splits=5, shuffle=True, random_state=42)
     
-    rmse_scores = []
-    r2_scores = []
-    adj_r2_scores = []
+    baseline_results = []
+    network_results = []
     
-    n = len(y)
-    p = X.shape[1]
+    logger.info("Starting Bulletproof Cross-Validation (Leakage-Free)...")
     
-    for train_index, test_index in kf.split(X):
-        X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+    fold = 1
+    for train_index, test_index in kf.split(raw_data):
+        logger.info(f"Processing Fold {fold}/5...")
         
-        model = LinearRegression()
-        model.fit(X_train, y_train)
+        train_df = raw_data.iloc[train_index].copy()
+        test_df = raw_data.iloc[test_index].copy()
         
-        preds = model.predict(X_test)
+        # 1. Centering (Preventing scalar leakage)
+        # Calculate means on TRAIN ONLY
+        train_means = train_df[CORE_ASPECTS].mean()
         
-        rmse = np.sqrt(mean_squared_error(y_test, preds))
-        r2 = r2_score(y_test, preds)
-        adj_r2 = calculate_adjusted_r2(r2, len(y_test), p)
+        for col in CORE_ASPECTS:
+            train_df[f"{col}_centered"] = train_df[col] - train_means[col]
+            test_df[f"{col}_centered"] = test_df[col] - train_means[col]
+            
+        y_train = train_df['rating']
+        y_test = test_df['rating']
         
-        rmse_scores.append(rmse)
-        r2_scores.append(r2)
-        adj_r2_scores.append(adj_r2)
+        base_centered_cols = [f"{col}_centered" for col in CORE_ASPECTS]
         
-    return np.mean(rmse_scores), np.mean(adj_r2_scores)
+        # 2. Baseline Model Evaluation
+        X_train_base = train_df[base_centered_cols]
+        X_test_base = test_df[base_centered_cols]
+        
+        reg_base = LinearRegression().fit(X_train_base, y_train)
+        preds_base = reg_base.predict(X_test_base)
+        
+        rmse_base = np.sqrt(mean_squared_error(y_test, preds_base))
+        r2_base = r2_score(y_test, preds_base)
+        adj_r2_base = calculate_adjusted_r2(r2_base, len(y_test), len(base_centered_cols))
+        baseline_results.append((rmse_base, adj_r2_base))
+        
+        # 3. Network Model (Structure Discovery on TRAIN ONLY)
+        G_fold = construct_partial_correlation_network(train_df[CORE_ASPECTS])
+        
+        # Generate interactions for both train and test based on DISCOVERED structure
+        train_df_int, interaction_cols = get_network_interactions(train_df, G_fold)
+        test_df_int, _ = get_network_interactions(test_df, G_fold)
+        
+        # Train Network Model
+        X_train_net = train_df_int[base_centered_cols + interaction_cols]
+        X_test_net = test_df_int[base_centered_cols + interaction_cols]
+        
+        reg_net = LinearRegression().fit(X_train_net, y_train)
+        preds_net = reg_net.predict(X_test_net)
+        
+        rmse_net = np.sqrt(mean_squared_error(y_test, preds_net))
+        r2_net = r2_score(y_test, preds_net)
+        adj_r2_net = calculate_adjusted_r2(r2_net, len(y_test), len(base_centered_cols) + len(interaction_cols))
+        network_results.append((rmse_net, adj_r2_net))
+        
+        fold += 1
+        
+    avg_rmse_base = np.mean([r[0] for r in baseline_results])
+    avg_adj_r2_base = np.mean([r[1] for r in baseline_results])
+    
+    avg_rmse_net = np.mean([r[0] for r in network_results])
+    avg_adj_r2_net = np.mean([r[1] for r in network_results])
+    
+    return (avg_rmse_base, avg_adj_r2_base), (avg_rmse_net, avg_adj_r2_net)
 
 def compare_models(df, G):
     """
-    Executes the comparison between Baseline and Network models.
+    Executes the comparison between Baseline and Network models using leakage-free CV.
     """
+    # 1. True Predictive Performance (CV)
+    (rmse1, adj_r2_1), (rmse2, adj_r2_2) = run_bulletproof_cv(df)
+    
+    # 2. Final Parameter Estimates (Full Dataset fit for interpretability/BIC)
     data = prepare_modeling_data(df)
     data, interaction_features = get_network_interactions(data, G)
     
     base_features = [f"{col}_centered" for col in CORE_ASPECTS]
-    
-    # Sanitize names for statsmodels/formula compatibility
     name_map = {f"{col}_centered": col.replace('/', '_').replace(' ', '_') + "_c" for col in CORE_ASPECTS}
     data = data.rename(columns=name_map)
     base_features_sanitized = list(name_map.values())
@@ -128,17 +193,11 @@ def compare_models(df, G):
     
     # Model 1: Baseline
     X1 = data[base_features_sanitized]
-    rmse1, adj_r2_1 = run_5fold_cv(X1, y)
-    
-    # Model 2: Network-Informed
-    X2 = data[base_features_sanitized + interaction_features]
-    rmse2, adj_r2_2 = run_5fold_cv(X2, y)
-    
-    # Full fit for AIC/BIC
-    # Add constant for statsmodels
     X1_sm = sm.add_constant(X1)
     sm_model1 = sm.OLS(y, X1_sm).fit()
     
+    # Model 2: Network-Informed
+    X2 = data[base_features_sanitized + interaction_features]
     X2_sm = sm.add_constant(X2)
     sm_model2 = sm.OLS(y, X2_sm).fit()
     
@@ -148,18 +207,17 @@ def compare_models(df, G):
     }
     
     # Print Comparison Table
-    print("\n" + "="*70)
-    print(f"{'Model':<15} | {'Avg RMSE':<12} | {'Avg Adj R2':<12} | {'AIC':<12} | {'BIC':<12}")
-    print("-" * 70)
+    print("\n" + "="*80)
+    print("BULLETPROOF COMPARISON: CROSS-VALIDATED PERFORMANCE (No Leakage)")
+    print("="*80)
+    print(f"{'Model':<15} | {'Avg RMSE':<12} | {'Avg Adj R2':<12} | {'Full AIC':<12} | {'Full BIC':<12}")
+    print("-" * 80)
     for name, m in results.items():
         print(f"{name:<15} | {m['RMSE']:<12.4f} | {m['AdjR2']:<12.4f} | {m['AIC']:<12.1f} | {m['BIC']:<12.1f}")
-    print("="*70)
+    print("="*80)
     
-    print("\nBASELINE MODEL SUMMARY (Full Dataset):")
-    print(sm_model1.summary())
-
-    print("\nNETWORK MODEL SUMMARY (Full Dataset):")
-    print(sm_model2.summary())
+    print("\nInterpretation: RMSE and Adj R2 are calculated using leakage-free cross-validation.")
+    print("AIC and BIC are calculated on the full-dataset fit for model selection purposes.")
     
     return {"baseline": sm_model1, "network": sm_model2}
 

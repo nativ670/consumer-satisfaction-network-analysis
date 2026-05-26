@@ -82,42 +82,14 @@
 <div id="graph-container">
     <div class="title">
         <h1>Cognitive Trade-off Network</h1>
-        <p>Node Size = PageRank (Anchors) | Edge Thickness = Compensatory Effect</p>
+        <p>Node Size = PageRank (Anchors) | Edge Thickness = Partial Correlation</p>
     </div>
     <div id="tooltip" class="tooltip"></div>
 </div>
 
+<script src="network_data.js"></script>
 <script>
-    // 1. Data State (Based strictly on user's Seminar Data)
-    const nodesData = [
-        { id: "Ingredients", pageRank: 0.2434 },
-        { id: "Packaging", pageRank: 0.2027 },
-        { id: "Price/Value", pageRank: 0.1363 },
-        { id: "Service/Shipping", pageRank: 0.1095 },
-        { id: "Smell/Fragrance", pageRank: 0.1092 },
-        { id: "Effectiveness/Results", pageRank: 0.1021 },
-        { id: "Texture/Consistency", pageRank: 0.0969 }
-    ];
-
-    const linksData = [
-        { source: "Smell/Fragrance", target: "Texture/Consistency", value: 0.59 },
-        { source: "Smell/Fragrance", target: "Packaging", value: 0.44 },
-        { source: "Smell/Fragrance", target: "Ingredients", value: 0.66 },
-        { source: "Price/Value", target: "Packaging", value: 0.66 },
-        { source: "Price/Value", target: "Ingredients", value: 0.75 },
-        { source: "Price/Value", target: "Effectiveness/Results", value: 0.60 },
-        { source: "Price/Value", target: "Service/Shipping", value: 0.56 },
-        { source: "Texture/Consistency", target: "Packaging", value: 0.39 },
-        { source: "Texture/Consistency", target: "Ingredients", value: 0.57 },
-        { source: "Texture/Consistency", target: "Effectiveness/Results", value: 0.54 },
-        { source: "Packaging", target: "Ingredients", value: 0.44 },
-        { source: "Packaging", target: "Effectiveness/Results", value: 0.51 },
-        { source: "Packaging", target: "Service/Shipping", value: 0.38 },
-        { source: "Ingredients", target: "Effectiveness/Results", value: 0.72 },
-        { source: "Ingredients", target: "Service/Shipping", value: 0.47 }
-    ];
-
-    // 2. Setup SVG Canvas
+    // 1. Setup SVG Canvas
     const container = document.getElementById('graph-container');
     const width = container.clientWidth;
     const height = container.clientHeight;
@@ -128,15 +100,15 @@
 
     const tooltip = d3.select("#tooltip");
 
-    // 3. Scales
-    // Map PageRank (0.09 to 0.25) to Node Radius (20 to 55)
+    // 2. Scales
+    // PageRank range: 0.0969 - 0.2434
     const radiusScale = d3.scaleSqrt()
         .domain([0.09, 0.25])
         .range([20, 55]);
 
-    // Map Compensatory Value (0.38 to 0.75) to Link Thickness (2 to 12)
+    // Link Value range: 0.0219 - 0.0841
     const linkScale = d3.scaleLinear()
-        .domain([0.38, 0.75])
+        .domain([0.02, 0.09])
         .range([2, 12]);
 
     // 4. Force Simulation
@@ -155,7 +127,7 @@
         .attr("stroke-width", d => linkScale(d.value))
         .on("mouseover", (event, d) => {
             tooltip.transition().duration(200).style("opacity", .9);
-            tooltip.html(`<b>Compensatory Penalty:</b> -${d.value}`)
+            tooltip.html(`<b>Partial Correlation:</b> ${d.value}`)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 28) + "px");
         })
