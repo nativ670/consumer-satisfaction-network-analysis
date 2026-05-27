@@ -1,0 +1,24 @@
+Interpretability Analysis Run Summary
+Timestamp: 2026-05-27 20:31:00.591371
+N reviews used: 322133
+
+GLASSO EDGES SELECTED:
+ - smell/fragrance <-> texture/consistency
+ - smell/fragrance <-> packaging
+ - smell/fragrance <-> ingredients
+ - price/value <-> packaging
+ - price/value <-> service/shipping
+ - texture/consistency <-> packaging
+ - texture/consistency <-> ingredients
+ - packaging <-> ingredients
+ - packaging <-> service/shipping
+ - ingredients <-> effectiveness/results
+ - ingredients <-> service/shipping
+
+SIGNIFICANT COEFFICIENTS PER MODEL:
+ - Linear Additive: const, smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered
+ - Linear Interaction: const, smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered, int_smell_fragrance_texture_consistency, int_smell_fragrance_packaging, int_smell_fragrance_ingredients, int_price_value_packaging, int_price_value_service_shipping, int_texture_consistency_packaging, int_texture_consistency_ingredients, int_packaging_ingredients, int_packaging_service_shipping, int_ingredients_effectiveness_results, int_ingredients_service_shipping
+ - Ordinal Additive: smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered
+ - Ordinal Interaction: smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered, int_smell_fragrance_texture_consistency, int_smell_fragrance_packaging, int_smell_fragrance_ingredients, int_price_value_packaging, int_price_value_service_shipping, int_texture_consistency_ingredients, int_packaging_ingredients, int_ingredients_effectiveness_results
+ - Binary Additive: const, smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered
+ - Binary Interaction: const, smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered, int_smell_fragrance_texture_consistency, int_smell_fragrance_packaging, int_smell_fragrance_ingredients, int_price_value_packaging, int_price_value_service_shipping, int_texture_consistency_packaging, int_texture_consistency_ingredients, int_packaging_ingredients, int_packaging_service_shipping, int_ingredients_effectiveness_results, int_ingredients_service_shipping
