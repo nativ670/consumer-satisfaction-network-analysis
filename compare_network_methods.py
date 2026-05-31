@@ -6,7 +6,7 @@ import os
 import ast
 import logging
 import json
-from src.network_builder import construct_partial_correlation_network
+from src.network_builder import construct_partial_correlation_network_cv
 from src.network_builder_ebic import construct_partial_correlation_network_ebic
 from src.modeling import prepare_raw_modeling_data
 from src.nlp_extraction import CORE_ASPECTS
@@ -43,8 +43,8 @@ def compare_networks():
     # Wait, the current construct_partial_correlation_network doesn't return the model.
     # I might need to slightly modify it or just accept I won't have the lambda easily 
     # unless I re-implement the CV call here.
-    # Actually, I'll just run it as is.
-    G_cv = construct_partial_correlation_network(feature_matrix)
+    # Actually, it will run the legacy CV version.
+    G_cv = construct_partial_correlation_network_cv(feature_matrix)
     
     logger.info("Constructing network using EBIC method...")
     G_ebic, selection_info = construct_partial_correlation_network_ebic(feature_matrix)

@@ -40,16 +40,16 @@ ADDED EDGES (Present in EBIC, not CV): 0
 
 SHARED EDGES: 11
   packaging <-> smell/fragrance: CV=0.0243, EBIC=0.0234
-  smell/fragrance <-> texture/consistency: CV=0.0281, EBIC=0.0273
-  effectiveness/results <-> ingredients: CV=0.0525, EBIC=0.0518
-  ingredients <-> service/shipping: CV=0.0319, EBIC=0.0312
-  packaging <-> service/shipping: CV=0.0557, EBIC=0.055
-  packaging <-> price/value: CV=0.0659, EBIC=0.0652
-  ingredients <-> texture/consistency: CV=0.0304, EBIC=0.0298
   packaging <-> texture/consistency: CV=0.0224, EBIC=0.0217
-  ingredients <-> packaging: CV=0.0784, EBIC=0.0778
+  smell/fragrance <-> texture/consistency: CV=0.0281, EBIC=0.0273
+  packaging <-> service/shipping: CV=0.0557, EBIC=0.055
   price/value <-> service/shipping: CV=0.0382, EBIC=0.0375
+  ingredients <-> service/shipping: CV=0.0319, EBIC=0.0312
+  ingredients <-> packaging: CV=0.0784, EBIC=0.0778
+  packaging <-> price/value: CV=0.0659, EBIC=0.0652
   ingredients <-> smell/fragrance: CV=0.0555, EBIC=0.0547
+  effectiveness/results <-> ingredients: CV=0.0525, EBIC=0.0518
+  ingredients <-> texture/consistency: CV=0.0304, EBIC=0.0298
 
 Edge Weight Correlation (Shared Edges): 1.0000
 Edge Overlap: 100.00%
