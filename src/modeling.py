@@ -231,7 +231,8 @@ if __name__ == "__main__":
         df = extract_aspects_and_sentiments(df)
         
         # Build Network
-        network_results = build_and_analyze_network(df)
+        filtered_df = prepare_raw_modeling_data(df)
+        network_results = build_and_analyze_network(filtered_df)
         G = network_results['graph']
         
         # Run Comparison

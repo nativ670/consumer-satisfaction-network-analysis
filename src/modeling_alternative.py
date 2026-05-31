@@ -318,7 +318,7 @@ if __name__ == "__main__":
     print("="*40)
     
     # 2. Interaction Model Diagnostics
-    network_res = build_and_analyze_network(df)
+    network_res = build_and_analyze_network(data)
     G = network_res['graph']
     data_int, interaction_cols = get_network_interactions(data, G)
     X_int = data_int[base_centered_cols + interaction_cols]
