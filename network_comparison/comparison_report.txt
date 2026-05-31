@@ -1,0 +1,56 @@
+NETWORK COMPARISON REPORT: CV vs EBIC
+========================================
+
+Number of observations (N): 322133
+EBIC Selected Lambda: 0.001
+EBIC value: 2245622.519017326
+
+CV Network Edges: 11
+EBIC Network Edges: 11
+
+CV NETWORK EDGES (u, v, weight):
+  packaging <-> ingredients: 0.0784
+  price/value <-> packaging: 0.0659
+  packaging <-> service/shipping: 0.0557
+  smell/fragrance <-> ingredients: 0.0555
+  ingredients <-> effectiveness/results: 0.0525
+  price/value <-> service/shipping: 0.0382
+  ingredients <-> service/shipping: 0.0319
+  texture/consistency <-> ingredients: 0.0304
+  smell/fragrance <-> texture/consistency: 0.0281
+  smell/fragrance <-> packaging: 0.0243
+  texture/consistency <-> packaging: 0.0224
+
+EBIC NETWORK EDGES (u, v, weight):
+  packaging <-> ingredients: 0.0778
+  price/value <-> packaging: 0.0652
+  packaging <-> service/shipping: 0.055
+  smell/fragrance <-> ingredients: 0.0547
+  ingredients <-> effectiveness/results: 0.0518
+  price/value <-> service/shipping: 0.0375
+  ingredients <-> service/shipping: 0.0312
+  texture/consistency <-> ingredients: 0.0298
+  smell/fragrance <-> texture/consistency: 0.0273
+  smell/fragrance <-> packaging: 0.0234
+  texture/consistency <-> packaging: 0.0217
+
+DROPPED EDGES (Present in CV, not EBIC): 0
+
+ADDED EDGES (Present in EBIC, not CV): 0
+
+SHARED EDGES: 11
+  packaging <-> smell/fragrance: CV=0.0243, EBIC=0.0234
+  smell/fragrance <-> texture/consistency: CV=0.0281, EBIC=0.0273
+  effectiveness/results <-> ingredients: CV=0.0525, EBIC=0.0518
+  ingredients <-> service/shipping: CV=0.0319, EBIC=0.0312
+  packaging <-> service/shipping: CV=0.0557, EBIC=0.055
+  packaging <-> price/value: CV=0.0659, EBIC=0.0652
+  ingredients <-> texture/consistency: CV=0.0304, EBIC=0.0298
+  packaging <-> texture/consistency: CV=0.0224, EBIC=0.0217
+  ingredients <-> packaging: CV=0.0784, EBIC=0.0778
+  price/value <-> service/shipping: CV=0.0382, EBIC=0.0375
+  ingredients <-> smell/fragrance: CV=0.0555, EBIC=0.0547
+
+Edge Weight Correlation (Shared Edges): 1.0000
+Edge Overlap: 100.00%
+Conclusion: nearly identical (>80% edge overlap)
