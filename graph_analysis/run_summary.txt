@@ -1,0 +1,34 @@
+============================================================
+GLASSO GRAPH ANALYSIS SUMMARY
+============================================================
+Timestamp: 2026-05-31 12:58:09
+Number of nodes: 7
+Number of edges: 11
+
+EDGES AND WEIGHTS:
+  packaging <-> ingredients: 0.0784 (weight=0.0784)
+  price/value <-> packaging: 0.0659 (weight=0.0659)
+  packaging <-> service/shipping: 0.0557 (weight=0.0557)
+  smell/fragrance <-> ingredients: 0.0555 (weight=0.0555)
+  ingredients <-> effectiveness/results: 0.0525 (weight=0.0525)
+  price/value <-> service/shipping: 0.0382 (weight=0.0382)
+  ingredients <-> service/shipping: 0.0319 (weight=0.0319)
+  texture/consistency <-> ingredients: 0.0304 (weight=0.0304)
+  smell/fragrance <-> texture/consistency: 0.0281 (weight=0.0281)
+  smell/fragrance <-> packaging: 0.0243 (weight=0.0243)
+  texture/consistency <-> packaging: 0.0224 (weight=0.0224)
+
+COMMUNITY ASSIGNMENTS:
+  Community 0: price/value, packaging, service/shipping
+  Community 1: smell/fragrance, texture/consistency, ingredients, effectiveness/results
+
+TOP 3 NODES BY PAGERANK:
+  ingredients: 0.2499
+  packaging: 0.2390
+  service/shipping: 0.1285
+
+SMALL-WORLD STRUCTURE: Not Detected (Sigma = 0.7082)
+
+BRIDGE EDGES FOUND (1):
+  ingredients <-> effectiveness/results
+============================================================
