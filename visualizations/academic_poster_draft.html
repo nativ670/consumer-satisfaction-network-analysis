@@ -76,14 +76,14 @@
         <div class="absolute top-0 left-0 w-full h-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500"></div>
 
         <!-- POSTER HEADER -->
-        <header class="relative text-center mt-2 mb-4 pb-4 border-b-2 border-slate-200 shrink-0">
-            <!-- HUJI Logo Placeholder (Square) -->
-            <div class="absolute top-0 right-0 flex items-center justify-center w-20 h-20 bg-slate-50 border-2 border-dashed border-slate-300 shadow-sm">
-                <span class="text-center text-[10px] font-bold text-slate-400 leading-tight">HUJI<br>Logo</span>
+        <header class="relative text-center mt-2 mb-4 pb-4 shrink-0">
+            <!-- University Logo -->
+            <div class="absolute -top-9 -right-12 flex items-center justify-center h-40 w-40">
+                <img src="uni-logo.png" alt="University Logo" class="max-h-full max-w-full object-contain">
             </div>
 
             <!-- Title -->
-            <h1 class="text-[42px] font-extrabold text-slate-900 mb-4 tracking-tight w-[85%] mx-auto leading-tight">Predictive Models for Consumer Satisfaction</h1>
+            <h1 class="text-[42px] font-extrabold text-slate-900 mb-4 tracking-tight w-[90%] mx-auto leading-tight">Predictive Models for Consumer Satisfaction</h1>
             
             <!-- Compact Names -->
             <div class="flex justify-center space-x-12">
@@ -100,12 +100,12 @@
             <!-- Splitting bullets into 2 columns so they aren't too long to read -->
             <ul class="bullet-list grid grid-cols-2 gap-x-10 mb-0">
                 <div>
-                    <li><b>The Problem:</b> Traditional consumer behavior models assume product attributes (e.g., price, quality) independently sum to create overall satisfaction.</li>
-                    <li><b>J-Shaped Reality:</b> Amazon reviews (n=322,133) strongly polarize into 1-star and 5-star ratings, indicating complex behavioral heuristics rather than a continuous linear score.</li>
+                    <li><b>The Problem:</b> Traditional consumer behavior models assume product attributes (e.g., price, quality) independently sum to create overall satisfaction<sup>1</sup></li>
+                    <li><b>J-Shaped Reality:</b> Online reviews strongly polarize into 1-star and 5-star ratings, indicating complex behavioral heuristics rather than a continuous linear score<sup>5</sup></li>
                 </div>
                 <div>
-                    <li><b>Cognitive Trade-offs:</b> Consumers evaluate attributes interactively using compensatory heuristics (e.g., the Halo Effect), where features offset one another.</li>
-                    <li><b>The Solution:</b> Modern network psychometrics reconceptualizes satisfaction as an emergent property of a dynamic interacting network of observable perceptions.</li>
+                    <li><b>Cognitive Trade-offs:</b> The Halo Effect & Spreading Activation theory may tell us that consumers evaluate attributes interactively using compensatory heuristics<sup>2,3</sup></li>
+                    <li><b>The Solution:</b> Modern network psychometrics reconceptualizes satisfaction as an emergent property of a dynamic interacting network of perceptions<sup>4</sup></li>
                 </div>
             </ul>
         </section>
@@ -146,8 +146,8 @@
                         <div class="bg-slate-50 border-2 border-blue-100 rounded-lg p-2.5 flex items-start w-1/2 shadow-sm">
                             <i data-lucide="database" class="text-blue-500 mr-2 mt-0.5 shrink-0 w-5 h-5"></i>
                             <div>
-                                <h3 class="font-bold text-[13px] text-slate-800 leading-tight">Amazon Reviews '23</h3>
-                                <span class="inline-block mt-1 bg-slate-200/70 text-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded border border-slate-300">
+                                <h3 class="font-bold text-[14px] text-slate-800 leading-tight">Amazon Reviews '23</h3>
+                                <span class="inline-block mt-1 bg-slate-200/70 text-slate-700 text-[10px] font-bold px-1.5 py-0.5 rounded border border-slate-300">
                                     322,133 reviews
                                 </span>
                             </div>
@@ -156,8 +156,8 @@
                         <div class="bg-slate-50 border-2 border-blue-100 rounded-lg p-2.5 flex items-start w-1/2 shadow-sm h-full">
                             <i data-lucide="search-code" class="text-blue-500 mr-2 mt-0.5 shrink-0 w-5 h-5"></i>
                             <div>
-                                <h3 class="font-bold text-[13px] text-slate-800 leading-tight mb-0.5">NLP Extraction</h3>
-                                <p class="text-[10px] text-slate-500 leading-tight mt-0.5">Text to sentiment</p>
+                                <h3 class="font-bold text-[14px] text-slate-800 leading-tight mb-0.5">NLP Extraction</h3>
+                                <p class="text-[11px] text-slate-500 leading-tight mt-0.5">Text to sentiment</p>
                             </div>
                         </div>
                     </div>
@@ -258,25 +258,24 @@
                         
                         <!-- Table 1: Linear -->
                         <div class="w-full bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                            <div class="flex items-center text-slate-700 bg-slate-100 py-1 px-3 border-b border-slate-200">
-                                <i data-lucide="activity" class="w-3.5 h-3.5 mr-2 text-teal-600 shrink-0"></i>
-                                <h4 class="font-bold text-[13px]">Linear Framework</h4>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="bg-slate-50 border-b border-slate-200 py-1.5 px-3">
-                                <div class="font-bold text-slate-400 text-[9px] tracking-wider uppercase"></div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase">Adj. R² <span class="text-[7px] text-emerald-500 block font-black">↑ FIT</span></div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase">BIC <span class="text-[7px] text-rose-500 block font-black">↓ COMPLEXITY</span></div>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="bg-slate-100 border-b border-slate-200 py-1.5 px-3 items-center">
+                                <div class="flex items-center text-slate-700">
+                                    <i data-lucide="activity" class="w-3.5 h-3.5 mr-2 text-teal-600 shrink-0"></i>
+                                    <h4 class="font-bold text-[13px] leading-none">Linear Framework</h4>
+                                </div>
+                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">Adj. R² <span class="text-[7px] text-emerald-500 block font-black mt-0.5">↑ FIT</span></div>
+                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">BIC <span class="text-[7px] text-rose-500 block font-black mt-0.5">↓ COMP.</span></div>
                             </div>
                             <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="border-b border-slate-100 py-1.5 px-3 items-center">
                                 <div class="font-bold text-xs text-orange-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-orange-400 mr-2 shrink-0"></span> Additive Baseline
+                                    <span class="w-2 h-2 rounded-full bg-orange-400 mr-2 shrink-0"></span> Baseline
                                 </div>
                                 <div class="text-center font-mono text-[13px] text-slate-600">0.3351</div>
                                 <div class="text-center font-mono text-[13px] text-slate-600">1,039,391</div>
                             </div>
                             <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="py-1.5 px-3 items-center bg-indigo-50/30">
                                 <div class="font-bold text-xs text-indigo-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network Interaction
+                                    <span class="w-2 h-2 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network
                                 </div>
                                 <div class="text-center font-mono text-sm font-bold text-emerald-600">0.3470</div>
                                 <div class="text-center font-mono text-sm font-bold text-emerald-600">1,032,536</div>
@@ -285,25 +284,24 @@
 
                         <!-- Table 2: Ordinal -->
                         <div class="w-full bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                            <div class="flex items-center text-slate-700 bg-slate-100 py-1 px-3 border-b border-slate-200">
-                                <i data-lucide="bar-chart-horizontal" class="w-3.5 h-3.5 mr-2 text-teal-600 shrink-0"></i>
-                                <h4 class="font-bold text-[13px]">Ordinal Framework</h4>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="bg-slate-50 border-b border-slate-200 py-1.5 px-3">
-                                <div class="font-bold text-slate-400 text-[9px] tracking-wider uppercase"></div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase">Log-Likelihood <span class="text-[7px] text-emerald-500 block font-black">↑ PROB</span></div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase">AIC <span class="text-[7px] text-rose-500 block font-black">↓ INF. LOSS</span></div>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="bg-slate-100 border-b border-slate-200 py-1.5 px-3 items-center">
+                                <div class="flex items-center text-slate-700">
+                                    <i data-lucide="bar-chart-horizontal" class="w-3.5 h-3.5 mr-2 text-teal-600 shrink-0"></i>
+                                    <h4 class="font-bold text-[13px] leading-none">Ordinal Framework</h4>
+                                </div>
+                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">Log-Likelihood <span class="text-[7px] text-emerald-500 block font-black mt-0.5">↑ PROB</span></div>
+                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">AIC <span class="text-[7px] text-rose-500 block font-black mt-0.5">↓ LOSS</span></div>
                             </div>
                             <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="border-b border-slate-100 py-1.5 px-3 items-center">
                                 <div class="font-bold text-xs text-orange-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-orange-400 mr-2 shrink-0"></span> Additive Baseline
+                                    <span class="w-2 h-2 rounded-full bg-orange-400 mr-2 shrink-0"></span> Baseline
                                 </div>
                                 <div class="text-center font-mono text-[13px] text-slate-600">-270,355.4</div>
                                 <div class="text-center font-mono text-[13px] text-slate-600">540,732.8</div>
                             </div>
                             <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="py-1.5 px-3 items-center bg-indigo-50/30">
                                 <div class="font-bold text-xs text-indigo-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network Interaction
+                                    <span class="w-2 h-2 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network
                                 </div>
                                 <div class="text-center font-mono text-sm font-bold text-emerald-600">-270,248.7</div>
                                 <div class="text-center font-mono text-sm font-bold text-emerald-600">540,541.4</div>
@@ -312,25 +310,24 @@
 
                         <!-- Table 3: Binary -->
                         <div class="w-full bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                            <div class="flex items-center text-slate-700 bg-slate-100 py-1 px-3 border-b border-slate-200">
-                                <i data-lucide="binary" class="w-3.5 h-3.5 mr-2 text-teal-600 shrink-0"></i>
-                                <h4 class="font-bold text-[13px]">Binary Framework</h4>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="bg-slate-50 border-b border-slate-200 py-1.5 px-3">
-                                <div class="font-bold text-slate-400 text-[9px] tracking-wider uppercase"></div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase">Accuracy <span class="text-[7px] text-emerald-500 block font-black">↑ BIAS</span></div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase">F1-Score <span class="text-[7px] text-emerald-500 block font-black">↑ BAL</span></div>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="bg-slate-100 border-b border-slate-200 py-1.5 px-3 items-center">
+                                <div class="flex items-center text-slate-700">
+                                    <i data-lucide="binary" class="w-3.5 h-3.5 mr-2 text-teal-600 shrink-0"></i>
+                                    <h4 class="font-bold text-[13px] leading-none">Binary Framework</h4>
+                                </div>
+                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">Accuracy <span class="text-[7px] text-emerald-500 block font-black mt-0.5">↑ BIAS</span></div>
+                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">F1-Score <span class="text-[7px] text-emerald-500 block font-black mt-0.5">↑ BAL</span></div>
                             </div>
                             <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="border-b border-slate-100 py-1.5 px-3 items-center">
                                 <div class="font-bold text-xs text-orange-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-orange-400 mr-2 shrink-0"></span> Additive Baseline
+                                    <span class="w-2 h-2 rounded-full bg-orange-400 mr-2 shrink-0"></span> Baseline
                                 </div>
                                 <div class="text-center font-mono text-[13px] font-bold text-emerald-600">0.747191</div>
                                 <div class="text-center font-mono text-[13px] font-bold text-emerald-600">0.794392</div>
                             </div>
                             <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="py-1.5 px-3 items-center bg-indigo-50/30">
                                 <div class="font-bold text-xs text-indigo-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network Interaction
+                                    <span class="w-2 h-2 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network
                                 </div>
                                 <div class="text-center font-mono text-xs text-slate-600">0.745810</div>
                                 <div class="text-center font-mono text-xs text-slate-600">0.794080</div>
@@ -351,10 +348,10 @@
                     <div class="section-header mb-2">
                         <i data-lucide="message-square" class="w-4 h-4"></i> Discussion & Limitations
                     </div>
-                    <p class="editable-text text-[13px] mb-2">
+                    <p class="editable-text text-[15px] mb-3 leading-relaxed">
                         The finding that interactions are consistently negative serves as a classic indicator of a compensatory psychological mechanism (diminishing marginal utility). If a product is outstanding in "Ingredients", consumers mentally forgive minor flaws in "Price" or "Packaging".
                     </p>
-                    <p class="editable-text text-[13px] mb-0">
+                    <p class="editable-text text-[15px] mb-0 leading-relaxed">
                         <b>Limitation:</b> A potential limitation of using OLS regression on a bounded 1-5 star scale is the "Ceiling Effect," potentially forcing negative interactions. However, by validating this structure across Ordinal and Binary frameworks (which gracefully handle discrete boundaries), we proved this is a genuine cognitive structure, not a statistical artifact.
                     </p>
                 </div>
@@ -364,7 +361,7 @@
                     <div class="section-header bg-slate-700 mb-2">
                         <i data-lucide="bookmark" class="w-4 h-4"></i> References
                     </div>
-                    <ol class="list-decimal pl-4 text-[11px] text-slate-500 leading-snug space-y-1">
+                    <ol class="list-decimal pl-5 text-[12px] text-slate-500 leading-snug space-y-1.5">
                         <li>Epskamp, S., & Fried, E. I. (2018). A tutorial on regularized partial correlation networks. <i>Psychological Methods</i>, 23(4), 617.</li>
                         <li>Friedman, J., Hastie, T., & Tibshirani, R. (2008). Sparse inverse covariance estimation with the graphical lasso. <i>Biostatistics</i>, 9(3).</li>
                         <li>Hu, M., Pavlou, P.A., & Zhang, J. (2009). Overcoming the J-shaped distribution of product reviews. <i>Communications of the ACM</i>, 52(10).</li>
