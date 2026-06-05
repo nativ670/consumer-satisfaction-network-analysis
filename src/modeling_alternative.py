@@ -7,7 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
 from sklearn.metrics import (
     mean_squared_error, r2_score, accuracy_score, 
-    roc_auc_score, f1_score
+    roc_auc_score, f1_score, confusion_matrix
 )
 import pickle
 import os
@@ -71,22 +71,27 @@ def run_brant_test(y, X):
             
     return pd.DataFrame(binary_coefs)
 
-def calculate_rps(probs, true_labels, num_categories=5):
+def calculate_rps(probs, true_labels, categories=[1, 2, 3, 4, 5]):
     """
     Calculates the Ranked Probability Score (RPS) for ordinal predictions.
     
     Args:
         probs (np.array): Predicted probabilities for each category (N, C).
-        true_labels (np.array): True labels (1-based, e.g., 1 to 5).
-        num_categories (int): Number of ordinal categories.
+        true_labels (np.array): True labels (actual rating values).
+        categories (list): The sorted category labels (e.g., [1, 2, 3, 4, 5]).
         
     Returns:
         float: Mean RPS across samples.
     """
-    # Convert true labels to one-hot encoding
+    num_categories = len(categories)
     y_true = np.zeros((len(true_labels), num_categories))
+    
+    # Map label to 0-indexed position
+    label_to_idx = {val: i for i, val in enumerate(categories)}
+    
     for i, label in enumerate(true_labels):
-        y_true[i, int(label) - 1] = 1
+        if label in label_to_idx:
+            y_true[i, label_to_idx[label]] = 1
     
     # Cumulative distributions
     cdf_pred = np.cumsum(probs, axis=1)
@@ -104,6 +109,7 @@ def run_ordinal_cv(df):
     
     # Ensure rating is 1-5 integers
     raw_data['rating'] = raw_data['rating'].astype(int)
+    rating_categories = [1, 2, 3, 4, 5]
     
     kf = KFold(n_splits=5, shuffle=True, random_state=42)
     
@@ -137,19 +143,30 @@ def run_ordinal_cv(df):
         X_test_base = test_df[base_centered_cols]
         
         # Fit OrderedModel (Proportional Odds)
-        # using 'logit' link for proportional odds
         model_add = OrderedModel(y_train, X_train_base, distr='logit')
         res_add = model_add.fit(method='bfgs', disp=False)
         
-        # Predict probabilities
-        probs_add = res_add.predict(X_test_base)
+        # Predict probabilities and classes
+        probs_add_df = res_add.predict(X_test_base)
+        probs_add_arr = probs_add_df.values
+
+        # Explicitly map argmax index (0-4) to 1-5 star rating
+        preds_add = [i + 1 for i in np.argmax(probs_add_arr, axis=1)]
+
+        if fold == 1:
+            logger.info(f"DEBUG: Sample Additive Predictions (First 10): {preds_add[:10]}")
+            logger.info(f"DEBUG: Sample True Labels (First 10):      {y_test.values[:10].tolist()}")
+
         # RPS
-        rps_add = calculate_rps(probs_add.values, y_test.values)
+        rps_add = calculate_rps(probs_add_arr, y_test.values, categories=rating_categories)
         
         results['additive'].append({
             'log_likelihood': res_add.llf,
             'aic': res_add.aic,
-            'rps': rps_add
+            'bic': res_add.bic,
+            'rps': rps_add,
+            'f1_macro': f1_score(y_test, preds_add, average='macro', labels=rating_categories),
+            'confusion_matrix': confusion_matrix(y_test, preds_add, labels=rating_categories)
         })
         
         # 2. Interaction Model
@@ -163,13 +180,21 @@ def run_ordinal_cv(df):
         model_int = OrderedModel(y_train, X_train_net, distr='logit')
         res_int = model_int.fit(method='bfgs', disp=False)
         
-        probs_int = res_int.predict(X_test_net)
-        rps_int = calculate_rps(probs_int.values, y_test.values)
+        probs_int_df = res_int.predict(X_test_net)
+        probs_int_arr = probs_int_df.values
+        
+        # Explicitly map argmax index (0-4) to 1-5 star rating
+        preds_int = [i + 1 for i in np.argmax(probs_int_arr, axis=1)]
+        
+        rps_int = calculate_rps(probs_int_arr, y_test.values, categories=rating_categories)
         
         results['interaction'].append({
             'log_likelihood': res_int.llf,
             'aic': res_int.aic,
-            'rps': rps_int
+            'bic': res_int.bic,
+            'rps': rps_int,
+            'f1_macro': f1_score(y_test, preds_int, average='macro', labels=rating_categories),
+            'confusion_matrix': confusion_matrix(y_test, preds_int, labels=rating_categories)
         })
         
         fold += 1
@@ -214,24 +239,21 @@ def run_binary_cv(df):
         base_centered_cols = [f"{col}_centered" for col in CORE_ASPECTS]
         
         # 1. Additive Model
-        X_train_base = train_df[base_centered_cols]
-        X_test_base = test_df[base_centered_cols]
+        X_train_base = sm.add_constant(train_df[base_centered_cols])
+        X_test_base = sm.add_constant(test_df[base_centered_cols])
         
-        # Use statsmodels Logit for LL and AIC consistency if needed, 
-        # but sklearn is often easier for metrics like F1/ROC-AUC.
-        # The user requested log-likelihood/AIC for Ordinal, 
-        # but for Binary they requested accuracy, ROC-AUC, F1.
+        # Use statsmodels for BIC consistency
+        model_add = sm.Logit(y_train, X_train_base).fit(disp=False)
         
-        clf_add = LogisticRegression(penalty=None, random_state=42, max_iter=1000)
-        clf_add.fit(X_train_base, y_train)
-        
-        preds_add = clf_add.predict(X_test_base)
-        probs_add = clf_add.predict_proba(X_test_base)[:, 1]
+        probs_add = model_add.predict(X_test_base)
+        preds_add = (probs_add > 0.5).astype(int)
         
         results['additive'].append({
             'accuracy': accuracy_score(y_test, preds_add),
             'roc_auc': roc_auc_score(y_test, probs_add),
-            'f1': f1_score(y_test, preds_add)
+            'f1': f1_score(y_test, preds_add),
+            'bic': model_add.bic,
+            'confusion_matrix': confusion_matrix(y_test, preds_add, labels=[0, 1])
         })
         
         # 2. Interaction Model
@@ -239,19 +261,20 @@ def run_binary_cv(df):
         train_df_int, interaction_cols = get_network_interactions(train_df, G_fold)
         test_df_int, _ = get_network_interactions(test_df, G_fold)
         
-        X_train_net = train_df_int[base_centered_cols + interaction_cols]
-        X_test_net = test_df_int[base_centered_cols + interaction_cols]
+        X_train_net = sm.add_constant(train_df_int[base_centered_cols + interaction_cols])
+        X_test_net = sm.add_constant(test_df_int[base_centered_cols + interaction_cols])
         
-        clf_int = LogisticRegression(penalty=None, random_state=42, max_iter=1000)
-        clf_int.fit(X_train_net, y_train)
+        model_int = sm.Logit(y_train, X_train_net).fit(disp=False)
         
-        preds_int = clf_int.predict(X_test_net)
-        probs_int = clf_int.predict_proba(X_test_net)[:, 1]
+        probs_int = model_int.predict(X_test_net)
+        preds_int = (probs_int > 0.5).astype(int)
         
         results['interaction'].append({
             'accuracy': accuracy_score(y_test, preds_int),
             'roc_auc': roc_auc_score(y_test, probs_int),
-            'f1': f1_score(y_test, preds_int)
+            'f1': f1_score(y_test, preds_int),
+            'bic': model_int.bic,
+            'confusion_matrix': confusion_matrix(y_test, preds_int, labels=[0, 1])
         })
         
         fold += 1

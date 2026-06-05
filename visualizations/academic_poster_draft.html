@@ -11,209 +11,257 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f1f5f9; 
+            background-color: #f8fafc; 
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
+            color: #1e293b;
         }
         /* The physical poster canvas - Exact 60x85 cm Aspect Ratio (1200x1700px) */
         .poster-canvas {
             width: 1200px;
             height: 1700px;
             background-color: #ffffff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
         }
-        /* Style for section headers */
+        /* Glassmorphism/Modern Card effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        /* Style for section headers - More sophisticated */
         .section-header {
-            background: #1e293b;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
-            padding: 6px 14px;
-            font-weight: 700;
-            font-size: 15px;
+            padding: 8px 16px;
+            font-weight: 800;
+            font-size: 18px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-radius: 6px;
+            letter-spacing: 0.08em;
+            border-radius: 8px;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
         .section-header i {
-            margin-right: 8px;
+            margin-right: 12px;
+            stroke-width: 2.5px;
         }
-        /* Editable text areas for easy reading */
+        /* Refined typography */
         p.editable-text {
-            color: #334155;
+            color: #475569;
             line-height: 1.5;
-            margin-bottom: 10px;
-            font-size: 14px;
+            margin-bottom: 8px;
+            font-size: 15px;
         }
         .bullet-list {
-            list-style-type: disc;
-            padding-left: 20px;
-            color: #334155;
-            font-size: 14px;
+            list-style-type: none;
+            padding-left: 0;
+            color: #475569;
+            font-size: 15px;
             line-height: 1.5;
-            margin-bottom: 10px;
         }
-        .bullet-list li { margin-bottom: 6px; }
+        .bullet-list li { 
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 6px; 
+        }
+        .bullet-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #0d9488;
+            font-weight: 900;
+        }
         
-        /* Print settings - eliminates margins and background colors for PDF output */
+        /* Print settings */
         @media print {
             body { background: none; padding: 0; }
-            .poster-canvas { box-shadow: none; width: 1200px; height: 1700px; }
+            .poster-canvas { box-shadow: none; width: 1200px; height: 1700px; border: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="poster-canvas p-8 border border-slate-200 flex flex-col">
+    <div class="poster-canvas p-8 border border-slate-200">
         
         <!-- Header Ribbon -->
-        <div class="absolute top-0 left-0 w-full h-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-500"></div>
+        <div class="absolute top-0 left-0 w-full h-5 bg-gradient-to-r from-slate-900 via-indigo-900 to-teal-900"></div>
 
         <!-- POSTER HEADER -->
-        <header class="relative text-center mt-2 mb-4 pb-4 shrink-0">
+        <header class="relative text-center mt-2 mb-6 pb-4 shrink-0">
             <!-- University Logo -->
-            <div class="absolute -top-9 -right-12 flex items-center justify-center h-40 w-40">
-                <img src="uni-logo.png" alt="University Logo" class="max-h-full max-w-full object-contain">
+            <div class="absolute -top-12 -right-12 flex items-center justify-center h-48 w-48 transition-transform hover:scale-105">
+                <img src="uni-logo.png" alt="University Logo" class="max-h-full max-w-full object-contain filter drop-shadow-md">
             </div>
 
             <!-- Title -->
-            <h1 class="text-[42px] font-extrabold text-slate-900 mb-4 tracking-tight w-[90%] mx-auto leading-tight">Predictive Models for Consumer Satisfaction</h1>
+            <div class="inline-block relative">
+                <h1 class="text-[48px] font-[900] text-slate-900 mb-2 tracking-tight w-[92%] mx-auto leading-[1.1] relative z-10">
+                    Predictive Models for Consumer Satisfaction: <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-500">A Network Psychometric Approach</span>
+                </h1>
+                <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-indigo-100 rounded-full"></div>
+            </div>
             
             <!-- Compact Names -->
-            <div class="flex justify-center space-x-12">
-                <p class="text-base text-slate-800 leading-tight"><b>[Your Name]</b>, [Your Department]</p>
-                <p class="text-base text-slate-800 leading-tight"><b>[Advisor Name]</b>, Hebrew University of Jerusalem</p>
+            <div class="flex justify-center space-x-16 mt-4">
+                <div class="flex items-center text-[17px] text-slate-600 font-medium bg-slate-50 px-4 py-2 rounded-full border border-slate-100 shadow-sm">
+                    <i data-lucide="user" class="w-4 h-4 mr-2 text-indigo-500"></i> <b>[Your Name]</b>
+                </div>
+                <div class="flex items-center text-[17px] text-slate-600 font-medium bg-slate-50 px-4 py-2 rounded-full border border-slate-100 shadow-sm">
+                    <i data-lucide="graduation-cap" class="w-4 h-4 mr-2 text-teal-600"></i> <b>[Advisor Name]</b>, Hebrew University
+                </div>
             </div>
         </header>
 
-        <!-- ROW 1: INTRO & BACKGROUND (Full Width) -->
-        <section class="mb-4 shrink-0">
+        <!-- MAIN LAYOUT: Introduction -->
+        <section class="mb-6 shrink-0">
             <div class="section-header">
-                <i data-lucide="book-open" class="w-5 h-5"></i> Introduction & Background
+                <i data-lucide="book-open"></i> Introduction
             </div>
-            <!-- Splitting bullets into 2 columns so they aren't too long to read -->
-            <ul class="bullet-list grid grid-cols-2 gap-x-10 mb-0">
-                <div>
-                    <li><b>The Problem:</b> Traditional consumer behavior models assume product attributes (e.g., price, quality) independently sum to create overall satisfaction<sup>1</sup></li>
-                    <li><b>J-Shaped Reality:</b> Online reviews strongly polarize into 1-star and 5-star ratings, indicating complex behavioral heuristics rather than a continuous linear score<sup>5</sup></li>
-                </div>
-                <div>
-                    <li><b>Cognitive Trade-offs:</b> The Halo Effect & Spreading Activation theory may tell us that consumers evaluate attributes interactively using compensatory heuristics<sup>2,3</sup></li>
-                    <li><b>The Solution:</b> Modern network psychometrics reconceptualizes satisfaction as an emergent property of a dynamic interacting network of perceptions<sup>4</sup></li>
-                </div>
-            </ul>
+            <div class="grid grid-cols-2 gap-x-12 px-2">
+                <ul class="bullet-list">
+                    <li><b>The Multi-Attribute Problem:</b> Traditional models assume satisfaction is a simple sum of independent feature weights<sup>3</sup>.</li>
+                    <li><b>Cognitive Interdependence:</b> The Halo Effect & Spreading Activation theory tell us that consumers evaluate attributes interactively using compensatory heuristics<sup>6,2</sup>.</li>
+                </ul>
+                <ul class="bullet-list">
+                    <li><b>Network Paradigm:</b> Reconceptualizing satisfaction as an emergent property of a dynamic interacting attribute network<sup>1</sup>.</li>
+                    <li><b>The J-Shaped Paradox:</b> Review distributions indicate that consumer evaluation reflects polarized behavioural groups rather than a continuous state<sup>4</sup>.</li>
+                </ul>
+            </div>
         </section>
 
         <!-- ROW 2: QUESTIONS | METHODOLOGY -->
-        <div class="grid grid-cols-2 gap-10 mb-4 shrink-0">
+        <div class="grid grid-cols-2 gap-10 mb-6 shrink-0">
 
             <!-- LEFT COLUMN: Research Questions -->
-            <section class="flex flex-col">
-                <div class="section-header">
-                    <i data-lucide="help-circle" class="w-5 h-5"></i> Research Questions
+            <section class="flex flex-col h-full">
+                <div class="section-header bg-indigo-900">
+                    <i data-lucide="target"></i> Research Objectives
                 </div>
-                <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl h-full flex flex-col justify-center">
-                    <p class="editable-text text-[15px] mb-4">
-                        <b class="text-indigo-700 block mb-1">1. Theoretical Question:</b> 
-                        In the process of forming an opinion, how are different attributes weighted in mental models, and do interactions shape overall satisfaction?
-                    </p>
-                    <p class="editable-text text-[15px] mb-0">
-                        <b class="text-indigo-700 block mb-1">2. Operational Question:</b> 
-                        Does incorporating measured network interactions (GLASSO) into a predictive model improve accuracy compared to a baseline additive model?
-                    </p>
+                <div class="bg-gradient-to-br from-indigo-50/50 to-white border border-indigo-100 p-6 rounded-3xl h-full flex flex-col justify-center relative overflow-hidden shadow-sm">
+                    <div class="absolute -right-8 -bottom-8 text-indigo-50 opacity-20">
+                        <i data-lucide="help-circle" class="w-48 h-48"></i>
+                    </div>
+                    <div class="relative z-10 space-y-4">
+                        <div class="flex items-start">
+                            <span class="bg-indigo-600 text-white font-black text-xs px-2 py-1 rounded mr-4 mt-1 shrink-0">TH</span>
+                            <p class="editable-text text-[15px] leading-relaxed mb-0 font-semibold text-slate-800">
+                                Are consumer evaluations based on independent product attributes or on interacting cognitive schemas?
+                            </p>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="bg-teal-600 text-white font-black text-xs px-2 py-1 rounded mr-4 mt-1 shrink-0">OP</span>
+                            <p class="editable-text text-[15px] leading-relaxed mb-0 font-semibold text-slate-800">
+                                Does incorporating network interactions improve the modeling of customer satisfaction compared with additive approaches?
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- RIGHT COLUMN: Methodology (Steps 1 & 2) -->
+            <!-- RIGHT COLUMN: Methodology -->
             <section class="flex flex-col">
-                <div class="section-header bg-blue-800">
-                    <i data-lucide="microscope" class="w-5 h-5"></i> Methodology
+                <div class="section-header bg-slate-800">
+                    <i data-lucide="cog"></i> Research Methodology
                 </div>
 
-                <!-- Step 1: Data & Processing -->
-                <div class="mb-3">
-                    <div class="flex items-center text-blue-800 mb-2 font-bold text-xs uppercase tracking-wide border-b-2 border-blue-100 pb-1">
-                        <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded mr-2 shadow-sm shrink-0">1</span> Data & Processing
+                <!-- Section 1: Data & Processing -->
+                <div class="mb-8 relative z-10 px-2">
+                    <div class="flex items-center text-blue-800 mb-4 font-bold text-sm uppercase tracking-[0.15em] border-l-4 border-indigo-500 pl-3">
+                        Step 1: NLP Pipeline
                     </div>
                     
-                    <div class="flex flex-row justify-between items-center gap-3">
-                        <div class="bg-slate-50 border-2 border-blue-100 rounded-lg p-2.5 flex items-start w-1/2 shadow-sm">
-                            <i data-lucide="database" class="text-blue-500 mr-2 mt-0.5 shrink-0 w-5 h-5"></i>
+                    <div class="flex flex-row justify-center items-center gap-4">
+                        <!-- Dataset Card -->
+                        <div class="bg-white border-2 border-indigo-50 rounded-2xl p-4 flex items-start w-[48%] shadow-sm">
+                            <i data-lucide="database" class="text-indigo-500 mr-3 mt-1 shrink-0 w-8 h-8"></i>
                             <div>
-                                <h3 class="font-bold text-[14px] text-slate-800 leading-tight">Amazon Reviews '23</h3>
-                                <span class="inline-block mt-1 bg-slate-200/70 text-slate-700 text-[10px] font-bold px-1.5 py-0.5 rounded border border-slate-300">
-                                    322,133 reviews
+                                <h3 class="font-bold text-[15px] text-slate-800">Amazon '23</h3>
+                                <span class="inline-block bg-slate-100 text-slate-700 text-[11px] font-bold px-2 py-0.5 rounded border border-slate-200 mt-1">
+                                    322k reviews
                                 </span>
                             </div>
                         </div>
-                        <i data-lucide="arrow-right" class="text-slate-300 w-5 h-5 shrink-0"></i>
-                        <div class="bg-slate-50 border-2 border-blue-100 rounded-lg p-2.5 flex items-start w-1/2 shadow-sm h-full">
-                            <i data-lucide="search-code" class="text-blue-500 mr-2 mt-0.5 shrink-0 w-5 h-5"></i>
+
+                        <i data-lucide="arrow-right" class="text-slate-300 w-6 h-6 shrink-0"></i>
+
+                        <!-- NLP Card -->
+                        <div class="bg-white border-2 border-indigo-50 rounded-2xl p-4 flex items-start w-[48%] shadow-sm h-full">
+                            <i data-lucide="search-code" class="text-indigo-500 mr-3 mt-1 shrink-0 w-8 h-8"></i>
                             <div>
-                                <h3 class="font-bold text-[14px] text-slate-800 leading-tight mb-0.5">NLP Extraction</h3>
-                                <p class="text-[11px] text-slate-500 leading-tight mt-0.5">Text to sentiment</p>
+                                <h3 class="font-bold text-[15px] text-slate-800 leading-tight mb-1">Feature Extraction</h3>
+                                <p class="text-[11px] text-slate-500 font-medium">Text to sentiment</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 2: Research Design -->
-                <div>
-                    <div class="flex items-center text-slate-800 mb-2 font-bold text-xs uppercase tracking-wide border-b-2 border-slate-200 pb-1">
-                        <span class="bg-slate-200 text-slate-700 px-2 py-0.5 rounded mr-2 shadow-sm shrink-0">2</span> Research Design
+                <!-- Section 2: Research Design -->
+                <div class="px-2">
+                    <div class="flex items-center text-slate-800 mb-4 font-bold text-sm uppercase tracking-[0.15em] border-l-4 border-teal-500 pl-3">
+                        Step 2: Modeling Design
                     </div>
                     
-                    <div class="flex flex-col gap-2.5">
+                    <div class="grid grid-cols-2 gap-6 items-stretch">
+                        
                         <!-- Baseline Track -->
-                        <div class="bg-orange-50/70 border-2 border-orange-200 rounded-lg p-2.5 relative shadow-sm">
-                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white text-orange-700 px-2 py-0.5 rounded-full text-[9px] font-bold border-2 border-orange-200 shadow-sm whitespace-nowrap">
-                                Baseline Additive Track
+                        <div class="bg-orange-50/40 border-2 border-orange-100 rounded-2xl p-4 relative flex flex-col shadow-sm">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white text-orange-700 px-3 py-0.5 rounded-full text-[10px] font-bold border-2 border-orange-200 shadow-sm whitespace-nowrap uppercase tracking-wider">
+                                Additive Track
                             </div>
-                            <div class="flex items-center justify-between mt-1">
-                                <div class="flex items-center space-x-2 w-[45%]">
-                                    <i data-lucide="layers" class="text-orange-500 w-4 h-4 shrink-0"></i>
+                            
+                            <div class="flex flex-col h-full mt-4">
+                                <div class="flex items-center space-x-3 bg-white border border-orange-100 rounded-xl p-3 shadow-sm">
+                                    <i data-lucide="layers" class="text-orange-500 w-6 h-6 shrink-0"></i>
                                     <div>
-                                        <h3 class="font-bold text-[11px] text-orange-900 leading-tight">Isolated Attributes</h3>
-                                        <p class="text-[9px] text-orange-700 leading-tight mt-0.5">Evaluated independently</p>
+                                        <h3 class="font-bold text-[13px] text-orange-900 leading-tight">Isolated Effects</h3>
+                                        <p class="text-[10px] text-orange-700 font-medium mt-0.5">Independent attributes</p>
                                     </div>
                                 </div>
-                                <i data-lucide="arrow-right" class="text-orange-300 w-4 h-4 shrink-0"></i>
-                                <div class="bg-white border border-orange-200 rounded-md p-1.5 w-[45%] text-center shadow-sm">
-                                    <div class="flex justify-center space-x-1 text-orange-500 mb-0.5">
-                                        <i data-lucide="trending-up" class="w-3 h-3 shrink-0"></i>
-                                        <i data-lucide="binary" class="w-3 h-3 shrink-0"></i>
-                                    </div>
-                                    <h4 class="font-bold text-[9px] text-slate-800 leading-tight">Additive Regressions</h4>
+
+                                <div class="flex justify-center py-2">
+                                    <i data-lucide="arrow-down" class="text-orange-200 w-6 h-6"></i>
+                                </div>
+                                
+                                <div class="bg-white border border-orange-100 rounded-xl p-3 w-full text-center shadow-sm mt-auto">
+                                    <h4 class="font-bold text-[12px] text-slate-800 leading-tight">Standard Regressions</h4>
+                                    <p class="text-[9px] text-orange-600 uppercase tracking-widest font-black mt-1">Linear/Ord/Bin</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Network Interaction Track -->
-                        <div class="bg-indigo-50/70 border-2 border-indigo-200 rounded-lg p-2.5 relative shadow-sm">
-                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white text-indigo-700 px-2 py-0.5 rounded-full text-[9px] font-bold border-2 border-indigo-200 shadow-sm whitespace-nowrap">
-                                Network Interaction Track
+                        <div class="bg-indigo-50/40 border-2 border-indigo-100 rounded-2xl p-4 relative flex flex-col shadow-sm">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white text-indigo-700 px-3 py-0.5 rounded-full text-[10px] font-bold border-2 border-indigo-100 shadow-sm whitespace-nowrap uppercase tracking-wider">
+                                Network Track
                             </div>
-                            <div class="flex items-center justify-between mt-1">
-                                <div class="flex items-center space-x-2 w-[45%]">
-                                    <i data-lucide="network" class="text-indigo-600 w-4 h-4 shrink-0"></i>
+                            
+                            <div class="flex flex-col h-full mt-4">
+                                <div class="flex items-center space-x-3 bg-white border border-indigo-100 rounded-xl p-3 shadow-sm">
+                                    <i data-lucide="network" class="text-indigo-600 w-6 h-6 shrink-0"></i>
                                     <div>
-                                        <h3 class="font-bold text-[11px] text-indigo-900 leading-tight">Network Estimation</h3>
-                                        <p class="text-[9px] text-indigo-700 leading-tight mt-0.5">GLASSO using EBIC</p>
+                                        <h3 class="font-bold text-[13px] text-indigo-900 leading-tight">GLASSO Estimation</h3>
+                                        <p class="text-[10px] text-indigo-700 font-medium mt-0.5">Selection via EBIC</p>
                                     </div>
                                 </div>
-                                <i data-lucide="arrow-right" class="text-indigo-300 w-4 h-4 shrink-0"></i>
-                                <div class="bg-white border border-indigo-200 rounded-md p-1.5 w-[45%] text-center shadow-sm">
-                                    <div class="flex justify-center space-x-1 text-indigo-600 mb-0.5">
-                                        <i data-lucide="trending-up" class="w-3 h-3 shrink-0"></i>
-                                        <i data-lucide="binary" class="w-3 h-3 shrink-0"></i>
-                                    </div>
-                                    <h4 class="font-bold text-[9px] text-slate-800 leading-tight">Network Regressions</h4>
+
+                                <div class="flex justify-center py-2">
+                                    <i data-lucide="arrow-down" class="text-indigo-200 w-6 h-6"></i>
+                                </div>
+                                
+                                <div class="bg-white border border-indigo-100 rounded-xl p-3 w-full text-center shadow-sm mt-auto">
+                                    <h4 class="font-bold text-[12px] text-slate-800 leading-tight">Interaction Modeling</h4>
+                                    <p class="text-[9px] text-indigo-600 uppercase tracking-widest font-black mt-1">Guided by Network</p>
                                 </div>
                             </div>
                         </div>
@@ -222,115 +270,99 @@
             </section>
         </div>
 
-        <!-- ROW 3: RESULTS (Full Width) -->
-        <!-- Now using the exact same grid-cols-2 as the row above -->
-        <section class="mb-4 border-t-2 border-slate-200 pt-4 shrink-0">
-            <div class="section-header bg-teal-800 mb-3">
-                <i data-lucide="bar-chart-2" class="w-5 h-5"></i> Results & Analysis
+        <!-- ROW 3: RESULTS (Network + Tables) -->
+        <section class="mb-6 border-t-2 border-slate-100 pt-6 shrink-0">
+            <div class="section-header bg-teal-900">
+                <i data-lucide="activity"></i> Results
             </div>
             
             <div class="grid grid-cols-2 gap-10 items-stretch">
-                <!-- Left side: Network Graph + Synthesis -->
-                <div class="flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xs font-bold text-center text-slate-800 mb-1.5">Cognitive Experience Network (GLASSO)</h3>
-                        <div id="network-canvas" class="relative shadow-sm overflow-hidden border border-slate-200 rounded-xl bg-white mb-3" style="height: 280px;">
-                            <!-- D3 Graph will render here -->
-                        </div>
+                <!-- Left: Network Graph & Findings -->
+                <div class="flex flex-col">
+                    <h3 class="text-[13px] font-black uppercase tracking-[0.2em] text-center text-slate-400 mb-4">The Cognitive Map</h3>
+                    <div id="network-canvas" class="relative shadow-inner border border-slate-100 rounded-[2rem] bg-slate-50/50 mb-4 overflow-hidden" style="height: 320px;">
+                        <!-- D3 Graph will render here -->
                     </div>
-
-                    <!-- Results Explanation -->
-                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl shadow-sm">
-                        <h4 class="font-bold text-slate-800 mb-1 border-b border-slate-200 pb-1 text-xs">Result Synthesis</h4>
-                        <p class="editable-text mb-0 text-[12px] leading-snug">
-                            Integrating GLASSO-derived network edges universally improved model fit (Adj. R²) while drastically lowering structural complexity (BIC drop of ~6,800). <b>Every single interaction coefficient was negative</b>, mathematically capturing the cognitive compensatory heuristic: overwhelming positive sentiment in one attribute cushions deficiencies in another.
-                        </p>
+                    <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-teal-500 opacity-10 rounded-full -mr-16 -mt-16"></div>
+                        <h4 class="font-black text-teal-400 mb-2 uppercase tracking-widest text-[14px]">Synthesis of Findings</h4>
+                        <ul class="text-[14px] leading-relaxed text-slate-300 mb-0 space-y-1 list-disc pl-5">
+                            <li>Two aspect clusters emerged: <b>External/Logistical</b> and <b>Internal/Sensory</b>.</li>
+                            <li>Most interaction coefficients were <b>negative</b>.</li>
+                            <li>The ordinal model predominantly predicted extreme ratings (1★ and 5★).</li>
+                            <li>Interaction terms improved model fit but did not improve predictive performance in the binary and ordinal framework.</li>
+                        </ul>
                     </div>
                 </div>
 
-                <!-- Right side: Cross Validated Tables -->
+                <!-- Right: Benchmarks -->
                 <div class="flex flex-col">
-                    <div class="flex items-center text-slate-800 mb-2 font-bold text-xs uppercase tracking-wide border-b-2 border-slate-200 pb-1">
-                        <span class="bg-slate-200 text-slate-700 px-2 py-0.5 rounded mr-2 shadow-sm shrink-0">3</span> Cross-Validated Benchmarks
-                    </div>
-                    
-                    <div class="bg-teal-50/40 border border-teal-200 rounded-xl p-4 w-full flex flex-col gap-3 flex-grow justify-center">
+                    <h3 class="text-[13px] font-black uppercase tracking-[0.2em] text-center text-slate-400 mb-4">Model Performance & Fit</h3>
+                    <div class="space-y-4 flex-grow flex flex-col justify-center">
                         
                         <!-- Table 1: Linear -->
-                        <div class="w-full bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="bg-slate-100 border-b border-slate-200 py-1.5 px-3 items-center">
-                                <div class="flex items-center text-slate-700">
-                                    <i data-lucide="activity" class="w-3.5 h-3.5 mr-2 text-teal-600 shrink-0"></i>
-                                    <h4 class="font-bold text-[13px] leading-none">Linear Framework</h4>
+                        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden group">
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr;" class="bg-slate-50 border-b border-slate-100 py-2 px-5 items-center">
+                                <div class="flex items-center">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-3"></div>
+                                    <h4 class="font-bold text-[16px] text-slate-700">Linear Framework</h4>
                                 </div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">Adj. R² <span class="text-[7px] text-emerald-500 block font-black mt-0.5">↑ FIT</span></div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">BIC <span class="text-[7px] text-rose-500 block font-black mt-0.5">↓ COMP.</span></div>
+                                <div class="text-center font-black text-slate-400 text-[10px] uppercase">Adj-R²</div>
+                                <div class="text-center font-black text-slate-400 text-[10px] uppercase">BIC</div>
                             </div>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="border-b border-slate-100 py-1.5 px-3 items-center">
-                                <div class="font-bold text-xs text-orange-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-orange-400 mr-2 shrink-0"></span> Baseline
-                                </div>
-                                <div class="text-center font-mono text-[13px] text-slate-600">0.3351</div>
-                                <div class="text-center font-mono text-[13px] text-slate-600">1,039,391</div>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr;" class="py-2 px-5 items-center border-b border-slate-50">
+                                <div class="font-bold text-xs text-slate-400">Additive</div>
+                                <div class="text-center font-mono text-[16px] text-slate-600">33.513%</div>
+                                <div class="text-center font-mono text-[16px] text-slate-600">1,039,391.31</div>
                             </div>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="py-1.5 px-3 items-center bg-indigo-50/30">
-                                <div class="font-bold text-xs text-indigo-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network
-                                </div>
-                                <div class="text-center font-mono text-sm font-bold text-emerald-600">0.3470</div>
-                                <div class="text-center font-mono text-sm font-bold text-emerald-600">1,032,536</div>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr;" class="py-3 px-5 items-center bg-indigo-50/30">
+                                <div class="font-black text-xs text-indigo-700 italic">Interaction</div>
+                                <div class="text-center font-mono text-[20px] font-black text-indigo-600">34.691%</div>
+                                <div class="text-center font-mono text-[20px] font-black text-indigo-600">1,033,700.77</div>
                             </div>
                         </div>
 
                         <!-- Table 2: Ordinal -->
-                        <div class="w-full bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="bg-slate-100 border-b border-slate-200 py-1.5 px-3 items-center">
-                                <div class="flex items-center text-slate-700">
-                                    <i data-lucide="bar-chart-horizontal" class="w-3.5 h-3.5 mr-2 text-teal-600 shrink-0"></i>
-                                    <h4 class="font-bold text-[13px] leading-none">Ordinal Framework</h4>
+                        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden group">
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr;" class="bg-slate-50 border-b border-slate-100 py-2 px-5 items-center">
+                                <div class="flex items-center">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-teal-500 mr-3"></div>
+                                    <h4 class="font-bold text-[16px] text-slate-700">Ordinal Framework</h4>
                                 </div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">Log-Likelihood <span class="text-[7px] text-emerald-500 block font-black mt-0.5">↑ PROB</span></div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">AIC <span class="text-[7px] text-rose-500 block font-black mt-0.5">↓ LOSS</span></div>
+                                <div class="text-center font-black text-slate-400 text-[10px] uppercase">Macro-F1</div>
+                                <div class="text-center font-black text-slate-400 text-[10px] uppercase">BIC</div>
                             </div>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="border-b border-slate-100 py-1.5 px-3 items-center">
-                                <div class="font-bold text-xs text-orange-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-orange-400 mr-2 shrink-0"></span> Baseline
-                                </div>
-                                <div class="text-center font-mono text-[13px] text-slate-600">-270,355.4</div>
-                                <div class="text-center font-mono text-[13px] text-slate-600">540,732.8</div>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr;" class="py-2 px-5 items-center border-b border-slate-50">
+                                <div class="font-bold text-xs text-slate-400">Additive</div>
+                                <div class="text-center font-mono text-[16px] text-slate-600">26.216%</div>
+                                <div class="text-center font-mono text-[16px] text-slate-600">676,031.06</div>
                             </div>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="py-1.5 px-3 items-center bg-indigo-50/30">
-                                <div class="font-bold text-xs text-indigo-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network
-                                </div>
-                                <div class="text-center font-mono text-sm font-bold text-emerald-600">-270,248.7</div>
-                                <div class="text-center font-mono text-sm font-bold text-emerald-600">540,541.4</div>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr;" class="py-3 px-5 items-center bg-teal-50/30">
+                                <div class="font-black text-xs text-teal-700 italic">Interaction</div>
+                                <div class="text-center font-mono text-[20px] font-black text-teal-600">26.228%</div>
+                                <div class="text-center font-mono text-[20px] font-black text-teal-600">675,907.60</div>
                             </div>
                         </div>
 
                         <!-- Table 3: Binary -->
-                        <div class="w-full bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="bg-slate-100 border-b border-slate-200 py-1.5 px-3 items-center">
-                                <div class="flex items-center text-slate-700">
-                                    <i data-lucide="binary" class="w-3.5 h-3.5 mr-2 text-teal-600 shrink-0"></i>
-                                    <h4 class="font-bold text-[13px] leading-none">Binary Framework</h4>
+                        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden group">
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr;" class="bg-slate-50 border-b border-slate-100 py-2 px-5 items-center">
+                                <div class="flex items-center">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-3"></div>
+                                    <h4 class="font-bold text-[16px] text-slate-700">Binary Framework</h4>
                                 </div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">Accuracy <span class="text-[7px] text-emerald-500 block font-black mt-0.5">↑ BIAS</span></div>
-                                <div class="text-center font-bold text-slate-500 text-[9px] tracking-wider uppercase leading-tight">F1-Score <span class="text-[7px] text-emerald-500 block font-black mt-0.5">↑ BAL</span></div>
+                                <div class="text-center font-black text-slate-400 text-[10px] uppercase">AUC</div>
+                                <div class="text-center font-black text-slate-400 text-[10px] uppercase">BIC</div>
                             </div>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="border-b border-slate-100 py-1.5 px-3 items-center">
-                                <div class="font-bold text-xs text-orange-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-orange-400 mr-2 shrink-0"></span> Baseline
-                                </div>
-                                <div class="text-center font-mono text-[13px] font-bold text-emerald-600">0.747191</div>
-                                <div class="text-center font-mono text-[13px] font-bold text-emerald-600">0.794392</div>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr;" class="py-2 px-5 items-center border-b border-slate-50">
+                                <div class="font-bold text-xs text-slate-400">Additive</div>
+                                <div class="text-center font-mono text-[20px] font-black text-amber-600">74.719%</div>
+                                <div class="text-center font-mono text-[16px] text-slate-600">344,530.03</div>
                             </div>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;" class="py-1.5 px-3 items-center bg-indigo-50/30">
-                                <div class="font-bold text-xs text-indigo-600 flex items-center whitespace-nowrap">
-                                    <span class="w-2 h-2 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network
-                                </div>
-                                <div class="text-center font-mono text-xs text-slate-600">0.745810</div>
-                                <div class="text-center font-mono text-xs text-slate-600">0.794080</div>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr;" class="py-3 px-5 items-center bg-amber-50/20">
+                                <div class="font-black text-xs text-amber-700 italic">Interaction</div>
+                                <div class="text-center font-mono text-[16px] text-slate-600">74.575%</div>
+                                <div class="text-center font-mono text-[20px] font-black text-amber-600">343,813.62</div>
                             </div>
                         </div>
 
@@ -340,31 +372,34 @@
         </section>
 
         <!-- ROW 4: DISCUSSION | REFERENCES -->
-        <section class="border-t-2 border-slate-200 pt-3 flex-grow">
-            <div class="grid grid-cols-2 gap-10 h-full">
+        <section class="border-t-2 border-slate-100 pt-6 flex-grow">
+            <div class="grid grid-cols-2 gap-16 h-full">
                 
                 <!-- Discussion -->
                 <div>
-                    <div class="section-header mb-2">
-                        <i data-lucide="message-square" class="w-4 h-4"></i> Discussion & Limitations
+                    <div class="section-header bg-slate-900 shadow-none">
+                        <i data-lucide="message-square"></i> Discussion
                     </div>
-                    <p class="editable-text text-[15px] mb-3 leading-relaxed">
-                        The finding that interactions are consistently negative serves as a classic indicator of a compensatory psychological mechanism (diminishing marginal utility). If a product is outstanding in "Ingredients", consumers mentally forgive minor flaws in "Price" or "Packaging".
-                    </p>
-                    <p class="editable-text text-[15px] mb-0 leading-relaxed">
-                        <b>Limitation:</b> A potential limitation of using OLS regression on a bounded 1-5 star scale is the "Ceiling Effect," potentially forcing negative interactions. However, by validating this structure across Ordinal and Binary frameworks (which gracefully handle discrete boundaries), we proved this is a genuine cognitive structure, not a statistical artifact.
-                    </p>
+                    <ul class="bullet-list text-[14px]">
+                        <li>Satisfaction emerges from conditional interactions between attributes rather than independent contributions - consistent with Gestalt evaluation and Spreading Activation theory.<sup>5,2</sup></li>
+                        <li>Predominantly negative interactions suggest compensatory trade-offs, where strengths in one aspect can offset weaknesses in another.</li>
+                        <li>Consumers evaluate intrinsic quality and extrinsic logistics as distinct cognitive systems, bridged structurally by Packaging and Ingredients.</li>
+                        <li>While predictive gains were modest, the network substantially improved model fit, suggesting its primary contribution is explanatory rather than predictive.</li>
+                    </ul>
                 </div>
 
                 <!-- References -->
-                <div>
-                    <div class="section-header bg-slate-700 mb-2">
-                        <i data-lucide="bookmark" class="w-4 h-4"></i> References
+                <div class="flex flex-col">
+                    <div class="section-header bg-slate-300 text-slate-800 shadow-none border border-slate-200">
+                        <i data-lucide="bookmark"></i> References
                     </div>
-                    <ol class="list-decimal pl-5 text-[12px] text-slate-500 leading-snug space-y-1.5">
-                        <li>Epskamp, S., & Fried, E. I. (2018). A tutorial on regularized partial correlation networks. <i>Psychological Methods</i>, 23(4), 617.</li>
-                        <li>Friedman, J., Hastie, T., & Tibshirani, R. (2008). Sparse inverse covariance estimation with the graphical lasso. <i>Biostatistics</i>, 9(3).</li>
-                        <li>Hu, M., Pavlou, P.A., & Zhang, J. (2009). Overcoming the J-shaped distribution of product reviews. <i>Communications of the ACM</i>, 52(10).</li>
+                    <ol class="list-decimal pl-6 text-[11px] text-slate-500 font-medium leading-relaxed space-y-2">
+                        <li>Borsboom, D. (2017). A network theory of mental disorders. <i>World Psychiatry</i>, 16(1), 5–13.</li>
+                        <li>Collins, A. M., & Loftus, E. F. (1975). A spreading-activation theory of semantic processing. <i>Psychological Review</i>, 82(6), 407–428.</li>
+                        <li>Hu, M., & Liu, B. (2004). Mining and summarizing customer reviews. <i>ACM SIGKDD</i>, 168–177.</li>
+                        <li>Hu, N., Zhang, J., & Pavlou, P. A. (2009). Overcoming the J-shaped distribution of product reviews. <i>Comm. of the ACM</i>, 52(10), 144–147.</li>
+                        <li>Mattila, A. S., & Wirtz, J. (2001). Congruency of scent and music as a driver of in-store evaluations and behavior. <i>Journal of Retailing</i>, 77(2), 273–289.</li>
+                        <li>Nisbett, R. E., & Wilson, T. D. (1977). The halo effect: Evidence for unconscious alteration of judgments. <i>Journal of Personality and Social Psychology</i>, 35(4), 250–256.</li>
                     </ol>
                 </div>
 
@@ -378,10 +413,9 @@
     <script>
         lucide.createIcons();
 
-        // Canvas dimensions (Matching the container in the layout)
-        const container = document.getElementById("network-canvas");
+        // Canvas dimensions
         const width = 520; 
-        const height = 280;
+        const height = 320;
 
         const svg = d3.select("#network-canvas")
             .append("svg")
@@ -389,30 +423,33 @@
             .attr("height", "100%")
             .attr("viewBox", [0, 0, width, height]);
 
-        const color = d3.scaleOrdinal(d3.schemeTableau10);
+        const communityMap = {
+            "packaging": 0, "price/value": 0, "service/shipping": 0,
+            "ingredients": 1, "smell/fragrance": 1, "texture/consistency": 1, "effectiveness/results": 1
+        };
+        const communityColors = ["#6366f1", "#0d9488"]; // Community 0: Indigo, Community 1: Teal
 
-        // Scales - Adjusted for smaller canvas
+        // Scales
         const radiusScale = d3.scaleSqrt()
             .domain([d3.min(nodesData, d => d.pageRank), d3.max(nodesData, d => d.pageRank)])
-            .range([12, 35]); 
+            .range([18, 45]); 
 
         const linkScale = d3.scaleLinear()
             .domain([d3.min(linksData, d => d.value), d3.max(linksData, d => d.value)])
-            .range([1.5, 8]);
+            .range([1.5, 7]);
 
         // Simulation
         const simulation = d3.forceSimulation(nodesData)
-            .force("link", d3.forceLink(linksData).id(d => d.id).distance(100))
-            .force("charge", d3.forceManyBody().strength(-300))
+            .force("link", d3.forceLink(linksData).id(d => d.id).distance(120))
+            .force("charge", d3.forceManyBody().strength(-400))
             .force("center", d3.forceCenter(width / 2, height / 2))
-            .force("collide", d3.forceCollide().radius(d => radiusScale(d.pageRank) + 10));
+            .force("collide", d3.forceCollide().radius(d => radiusScale(d.pageRank) + 12));
 
         const link = svg.append("g")
             .selectAll("line")
             .data(linksData)
             .enter().append("line")
-            .attr("class", "link")
-            .attr("stroke", "#cbd5e1")
+            .attr("stroke", "#e2e8f0")
             .attr("stroke-opacity", 0.6)
             .attr("stroke-width", d => linkScale(d.value));
 
@@ -428,53 +465,39 @@
 
         node.append("circle")
             .attr("r", d => radiusScale(d.pageRank))
-            .attr("fill", (d, i) => color(i))
+            .attr("fill", d => communityColors[communityMap[d.id]])
             .attr("stroke", "#fff")
-            .attr("stroke-width", 2);
+            .attr("stroke-width", 2.5)
+            .style("filter", "drop-shadow(0 4px 3px rgba(0,0,0,0.07))");
 
         node.append("text")
             .attr("dy", ".35em")
             .attr("text-anchor", "middle")
             .text(d => d.id)
-            .style("font-size", "10px")
+            .style("font-size", "11px")
             .style("font-weight", "800")
-            .style("fill", "#1a1a1a")
+            .style("fill", "#1e293b")
             .style("pointer-events", "none")
             .style("paint-order", "stroke")
             .style("stroke", "#ffffff")
-            .style("stroke-width", "3px")
+            .style("stroke-width", "3.5px")
             .style("stroke-linecap", "round")
             .style("stroke-linejoin", "round");
 
         simulation.on("tick", () => {
-            link
-                .attr("x1", d => d.source.x)
-                .attr("y1", d => d.source.y)
-                .attr("x2", d => d.target.x)
-                .attr("y2", d => d.target.y);
-
-            node
-                .attr("transform", d => `translate(${d.x},${d.y})`);
+            link.attr("x1", d => d.source.x).attr("y1", d => d.source.y).attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
         });
 
         function dragstarted(event, d) {
             if (!event.active) simulation.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
+            d.fx = d.x; d.fy = d.y;
         }
-
-        function dragged(event, d) {
-            d.fx = event.x;
-            d.fy = event.y;
-        }
-
+        function dragged(event, d) { d.fx = event.x; d.fy = event.y; }
         function dragended(event, d) {
             if (!event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
+            d.fx = null; d.fy = null;
         }
-
-        // Auto-stop simulation after it settles to keep the poster static
         setTimeout(() => simulation.stop(), 4000);
     </script>
 </body>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Academic Poster - Consumer Satisfaction Network Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; 
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            color: #0f172a;
+        }
+        /* The physical poster canvas - Exact 60x85 cm Aspect Ratio (1200x1700px) */
+        .poster-canvas {
+            width: 1200px;
+            height: 1700px;
+            background-color: #ffffff;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px;
+        }
+        
+        .section-header {
+            background: #1e293b;
+            color: white;
+            padding: 12px 20px;
+            font-weight: 800;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .section-header i {
+            margin-right: 14px;
+            stroke-width: 2.5px;
+        }
+
+        .bullet-list {
+            list-style-type: none;
+            padding-left: 0;
+            color: #334155;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .bullet-list li { 
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 14px; 
+        }
+        .bullet-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #4f46e5;
+            font-weight: 900;
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px;
+        }
+        .results-table th {
+            text-align: left;
+            padding: 12px;
+            background-color: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+        }
+        .results-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-weight: 500;
+        }
+        .results-table tr.highlight {
+            background-color: #f0fdf4;
+        }
+        .results-table .model-name {
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .ref-list {
+            font-size: 11px;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+        .ref-list li {
+            margin-bottom: 6px;
+        }
+
+        @media print {
+            body { background: none; padding: 0; }
+            .poster-canvas { box-shadow: none; width: 1200px; height: 1700px; border: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="poster-canvas p-14 border border-slate-200">
+        
+        <!-- Header Ribbon -->
+        <div class="absolute top-0 left-0 w-full h-6 bg-gradient-to-r from-indigo-900 via-slate-900 to-emerald-900"></div>
+
+        <!-- POSTER HEADER -->
+        <header class="relative text-center mt-6 mb-12 shrink-0">
+            <!-- University Logo -->
+            <div class="absolute -top-12 -right-8 flex items-center justify-center h-44 w-44">
+                <img src="uni-logo_d.png" alt="University Logo" class="max-h-full max-w-full object-contain filter drop-shadow-sm opacity-90">
+            </div>
+
+            <!-- Title -->
+            <div class="inline-block relative">
+                <h1 class="text-[54px] font-[900] text-slate-900 mb-4 tracking-tight leading-[1.1] w-[95%] mx-auto">
+                    The Cognitive Network of Experience: <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 to-emerald-600 italic font-serif">Mapping Consumer Satisfaction as an Emergent Property</span>
+                </h1>
+                <div class="h-1.5 w-48 bg-indigo-600 mx-auto rounded-full mt-4"></div>
+            </div>
+            
+            <div class="flex justify-center space-x-12 mt-8">
+                <div class="flex items-center text-[19px] text-slate-600 font-bold bg-white px-6 py-3 rounded-xl border border-slate-100 shadow-sm">
+                    <i data-lucide="user" class="w-5 h-4 mr-3 text-indigo-500"></i> Nativ, Hebrew University of Jerusalem
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN GRID: TWO COLUMNS -->
+        <div class="grid grid-cols-2 gap-x-14 flex-grow">
+            
+            <!-- LEFT COLUMN -->
+            <div class="flex flex-col space-y-10">
+                
+                <!-- INTRODUCTION -->
+                <section>
+                    <div class="section-header">
+                        <i data-lucide="info"></i> Introduction
+                    </div>
+                    <div class="bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+                        <ul class="bullet-list">
+                            <li><b>The Multi-Attribute Problem:</b> Traditional models assume satisfaction is a simple sum of independent feature weights<sup>3</sup>.</li>
+                            <li><b>Cognitive Interdependence:</b> The Halo Effect & Spreading Activation theory tell us that consumers evaluate attributes interactively using compensatory heuristics<sup>6,2</sup>.</li>
+                            <li><b>Network Paradigm:</b> Reconceptualizing satisfaction as an emergent property of a dynamic interacting attribute network<sup>1</sup>.</li>
+                            <li><b>The J-Shaped Paradox:</b> Review distributions indicate that consumer evaluation reflects polarized behavioral groups rather than a continuous state<sup>4</sup>.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- RQ & OBJECTIVES -->
+                <section>
+                    <div class="section-header bg-indigo-900">
+                        <i data-lucide="help-circle"></i> Research Objectives
+                    </div>
+                    <div class="space-y-6 px-2">
+                        <div class="p-6 border-l-4 border-indigo-500 bg-indigo-50/30 rounded-r-2xl">
+                            <h4 class="font-black text-indigo-900 text-xs uppercase tracking-widest mb-3">Theoretical Question</h4>
+                            <p class="text-[17px] leading-relaxed text-slate-800 font-medium italic">
+                                "How are experience attributes represented and weighted in individuos' mental models? Do they rely on isolated features or complex behavioral schemas driven by interactions?"
+                            </p>
+                        </div>
+                        <div class="p-6 border-l-4 border-emerald-500 bg-emerald-50/30 rounded-r-2xl">
+                            <h4 class="font-black text-emerald-900 text-xs uppercase tracking-widest mb-3">Operational Question</h4>
+                            <p class="text-[17px] leading-relaxed text-slate-800 font-medium italic">
+                                "Does incorporating measured network interactions into a predictive model improve the accuracy of forecasting overall customer satisfaction compared to traditional models?"
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- NETWORK VISUALIZATION -->
+                <section class="flex-grow">
+                    <div class="section-header bg-slate-800">
+                        <i data-lucide="share-2"></i> The Attribute Interaction Network
+                    </div>
+                    <div class="flex flex-col h-full bg-slate-900 rounded-3xl overflow-hidden shadow-2xl relative">
+                        <div id="network-canvas" class="w-full" style="height: 480px;"></div>
+                        <div class="p-6 bg-slate-800/80 backdrop-blur-sm border-t border-slate-700">
+                            <p class="text-white text-[15px] leading-relaxed mb-0">
+                                <b>Network Structure:</b> Two distinct clusters emerged: <span class="text-indigo-400 font-bold">External/Logistical</span> (Service, Price, Packaging) and <span class="text-emerald-400 font-bold">Internal/Sensory</span> (Ingredients, Smell, Texture). The system is bridged structurally by <i>Packaging</i> and <i>Ingredients</i>.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="flex flex-col space-y-10">
+                
+                <!-- RESULTS -->
+                <section>
+                    <div class="section-header bg-emerald-900">
+                        <i data-lucide="bar-chart-3"></i> Quantitative Results
+                    </div>
+                    
+                    <div class="bg-white border-2 border-slate-100 rounded-3xl overflow-hidden shadow-sm mb-8">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Predictive Model</th>
+                                    <th>Adj-R²/Macro-F1/AUC</th>
+                                    <th>BIC (Complexity)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="model-name">Linear – Additive</td>
+                                    <td>33.513%</td>
+                                    <td>1,039,391.31</td>
+                                </tr>
+                                <tr class="highlight">
+                                    <td class="model-name">Linear – Interaction</td>
+                                    <td>34.691%</td>
+                                    <td>1,033,700.77</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name">Ordinal – Additive</td>
+                                    <td>26.216%</td>
+                                    <td>676,031.06</td>
+                                </tr>
+                                <tr class="highlight">
+                                    <td class="model-name">Ordinal – Interaction</td>
+                                    <td>26.228%</td>
+                                    <td>675,907.60</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name">Binary – Additive</td>
+                                    <td>74.719%</td>
+                                    <td>344,530.03</td>
+                                </tr>
+                                <tr class="highlight">
+                                    <td class="model-name">Binary – Interaction</td>
+                                    <td>74.575%</td>
+                                    <td>343,813.62</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="p-5 bg-slate-50 border border-slate-100 rounded-2xl">
+                            <h5 class="font-black text-[11px] uppercase tracking-tighter text-slate-400 mb-2">Key Finding #1</h5>
+                            <p class="text-[14px] font-bold text-slate-700">Most interaction coefficients were <b>negative</b>, confirming mathematical trade-offs.</p>
+                        </div>
+                        <div class="p-5 bg-slate-50 border border-slate-100 rounded-2xl">
+                            <h5 class="font-black text-[11px] uppercase tracking-tighter text-slate-400 mb-2">Key Finding #2</h5>
+                            <p class="text-[14px] font-bold text-slate-700">The ordinal model predominantly predicted <b>extreme ratings</b> (1★ and 5★).</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DISCUSSION -->
+                <section>
+                    <div class="section-header bg-slate-900">
+                        <i data-lucide="message-circle"></i> Discussion & Synthesis
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="bg-indigo-100 p-2 rounded-lg mr-4 mt-1"><i data-lucide="zap" class="w-5 h-5 text-indigo-600"></i></div>
+                            <p class="text-[16px] leading-relaxed text-slate-700">
+                                Satisfaction emerges from <b>conditional interactions</b> between attributes rather than independent contributions — consistent with Gestalt evaluation and Spreading Activation theory<sup>5,2</sup>.
+                            </p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-emerald-100 p-2 rounded-lg mr-4 mt-1"><i data-lucide="refresh-cw" class="w-5 h-5 text-emerald-600"></i></div>
+                            <p class="text-[16px] leading-relaxed text-slate-700">
+                                Predominantly negative interactions suggest <b>compensatory trade-offs</b>, where strengths in one aspect (e.g., Sensory) can offset weaknesses in another (e.g., Logistical).
+                            </p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-amber-100 p-2 rounded-lg mr-4 mt-1"><i data-lucide="layers" class="w-5 h-5 text-amber-600"></i></div>
+                            <p class="text-[16px] leading-relaxed text-slate-700">
+                                While predictive gains were modest, the network <b>substantially improved model fit (BIC)</b>, suggesting its primary contribution is <b>explanatory</b> rather than purely predictive.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- REFERENCES -->
+                <section class="mt-auto">
+                    <div class="section-header bg-slate-200 text-slate-800 shadow-none border border-slate-300 mb-4 py-2">
+                        <i data-lucide="book-marked" class="w-4 h-4"></i> References
+                    </div>
+                    <ul class="ref-list space-y-1">
+                        <li>[1] Borsboom, D. (2017). A network theory of mental disorders. <i>World Psychiatry</i>.</li>
+                        <li>[2] Collins & Loftus (1975). Spreading-activation theory. <i>Psychological Review</i>.</li>
+                        <li>[3] Hu & Liu (2004). Mining and summarizing customer reviews. <i>ACM SIGKDD</i>.</li>
+                        <li>[4] Hu, Zhang & Pavlou (2009). J-shaped distribution of reviews. <i>Comm. of the ACM</i>.</li>
+                        <li>[5] Mattila & Wirtz (2001). Congruency of scent and music. <i>Journal of Retailing</i>.</li>
+                        <li>[6] Nisbett & Wilson (1977). The halo effect. <i>Journal of Personality and Social Psych</i>.</li>
+                    </ul>
+                </section>
+
+            </div>
+
+        </div>
+        
+        <!-- Footer / QR placeholder -->
+        <footer class="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center shrink-0">
+            <div class="flex space-x-8 text-slate-400 font-bold text-[12px] uppercase tracking-widest">
+                <span>Consumer Psychology</span>
+                <span>•</span>
+                <span>Network Psychometrics</span>
+                <span>•</span>
+                <span>NLP Analytics</span>
+            </div>
+            <div class="text-right text-slate-300 font-black italic text-[24px]">2026 SEMINAR</div>
+        </footer>
+
+    </div>
+
+    <!-- Network Data Injection -->
+    <script>
+        const nodesData = [
+            { id: "smell/fragrance", pageRank: 0.15 },
+            { id: "price/value", pageRank: 0.12 },
+            { id: "texture/consistency", pageRank: 0.14 },
+            { id: "packaging", pageRank: 0.18 },
+            { id: "ingredients", pageRank: 0.17 },
+            { id: "effectiveness/results", pageRank: 0.16 },
+            { id: "service/shipping", pageRank: 0.08 }
+        ];
+
+        const linksData = [
+            { source: "smell/fragrance", target: "texture/consistency", value: 5 },
+            { source: "smell/fragrance", target: "packaging", value: 3 },
+            { source: "smell/fragrance", target: "ingredients", value: 4 },
+            { source: "price/value", target: "packaging", value: 2 },
+            { source: "price/value", target: "service/shipping", value: 6 },
+            { source: "texture/consistency", target: "packaging", value: 3 },
+            { source: "texture/consistency", target: "ingredients", value: 7 },
+            { source: "packaging", target: "ingredients", value: 5 },
+            { source: "packaging", target: "service/shipping", value: 2 },
+            { source: "ingredients", target: "effectiveness/results", value: 8 },
+            { source: "ingredients", target: "service/shipping", value: 1 }
+        ];
+
+        lucide.createIcons();
+
+        // Canvas dimensions
+        const width = 550; 
+        const height = 480;
+
+        const svg = d3.select("#network-canvas")
+            .append("svg")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("viewBox", [0, 0, width, height]);
+
+        const communityMap = {
+            "packaging": 0, "price/value": 0, "service/shipping": 0,
+            "ingredients": 1, "smell/fragrance": 1, "texture/consistency": 1, "effectiveness/results": 1
+        };
+        const communityColors = ["#818cf8", "#34d399"]; // Indigo-400, Emerald-400
+
+        // Scales
+        const radiusScale = d3.scaleSqrt()
+            .domain([0, 0.2])
+            .range([20, 55]); 
+
+        const linkScale = d3.scaleLinear()
+            .domain([1, 10])
+            .range([1, 8]);
+
+        // Simulation
+        const simulation = d3.forceSimulation(nodesData)
+            .force("link", d3.forceLink(linksData).id(d => d.id).distance(150))
+            .force("charge", d3.forceManyBody().strength(-800))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collide", d3.forceCollide().radius(d => radiusScale(d.pageRank) + 20));
+
+        const link = svg.append("g")
+            .selectAll("line")
+            .data(linksData)
+            .enter().append("line")
+            .attr("stroke", "#475569")
+            .attr("stroke-opacity", 0.4)
+            .attr("stroke-width", d => linkScale(d.value));
+
+        const node = svg.append("g")
+            .selectAll("g")
+            .data(nodesData)
+            .enter().append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        node.append("circle")
+            .attr("r", d => radiusScale(d.pageRank))
+            .attr("fill", d => communityColors[communityMap[d.id]])
+            .attr("stroke", "#0f172a")
+            .attr("stroke-width", 2)
+            .style("filter", "drop-shadow(0 10px 15px rgba(0,0,0,0.4))");
+
+        node.append("text")
+            .attr("dy", ".35em")
+            .attr("text-anchor", "middle")
+            .text(d => d.id)
+            .style("font-size", "12px")
+            .style("font-weight", "900")
+            .style("fill", "#fff")
+            .style("pointer-events", "none")
+            .style("paint-order", "stroke")
+            .style("stroke", "#0f172a")
+            .style("stroke-width", "4px");
+
+        simulation.on("tick", () => {
+            link.attr("x1", d => d.source.x).attr("y1", d => d.source.y).attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x; d.fy = d.y;
+        }
+        function dragged(event, d) { d.fx = event.x; d.fy = event.y; }
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null; d.fy = null;
+        }
+        
+        // Stop simulation after convergence to prevent CPU drain
+        setTimeout(() => simulation.stop(), 5000);
+    </script>
+</body>
+</html>

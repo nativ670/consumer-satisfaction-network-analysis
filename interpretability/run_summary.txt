@@ -1,6 +1,16 @@
 Interpretability Analysis Run Summary
-Timestamp: 2026-05-31 22:43:49.103608
+Timestamp: 2026-06-04 10:44:10.908542
 N reviews used: 322133
+
+MODEL COMPLEXITY (Full Dataset BIC):
+Model                     | BIC            
+----------------------------------------
+Linear Additive           | 1,039,391.31
+Linear Interaction        | 1,033,700.77
+Ordinal Additive          | 676,031.06
+Ordinal Interaction       | 675,907.60
+Binary Additive           | 344,530.03
+Binary Interaction        | 343,813.62
 
 GLASSO EDGES SELECTED:
  - smell/fragrance <-> texture/consistency

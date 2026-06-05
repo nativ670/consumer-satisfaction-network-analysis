@@ -1,22 +1,22 @@
 ============================================================
 GLASSO GRAPH ANALYSIS SUMMARY
 ============================================================
-Timestamp: 2026-05-31 22:25:31
+Timestamp: 2026-06-04 01:27:33
 Number of nodes: 7
 Number of edges: 11
 
 EDGES AND WEIGHTS:
-  packaging <-> ingredients: 0.0784 (weight=0.0778)
-  price/value <-> packaging: 0.0659 (weight=0.0652)
-  packaging <-> service/shipping: 0.0557 (weight=0.0550)
-  smell/fragrance <-> ingredients: 0.0555 (weight=0.0547)
-  ingredients <-> effectiveness/results: 0.0525 (weight=0.0518)
-  price/value <-> service/shipping: 0.0382 (weight=0.0375)
-  ingredients <-> service/shipping: 0.0319 (weight=0.0312)
-  texture/consistency <-> ingredients: 0.0304 (weight=0.0298)
-  smell/fragrance <-> texture/consistency: 0.0281 (weight=0.0273)
-  smell/fragrance <-> packaging: 0.0243 (weight=0.0234)
-  texture/consistency <-> packaging: 0.0224 (weight=0.0217)
+  packaging <-> ingredients: 0.0778 (weight=0.0778)
+  price/value <-> packaging: 0.0652 (weight=0.0652)
+  packaging <-> service/shipping: 0.0550 (weight=0.0550)
+  smell/fragrance <-> ingredients: 0.0547 (weight=0.0547)
+  ingredients <-> effectiveness/results: 0.0518 (weight=0.0518)
+  price/value <-> service/shipping: 0.0375 (weight=0.0375)
+  ingredients <-> service/shipping: 0.0312 (weight=0.0312)
+  texture/consistency <-> ingredients: 0.0298 (weight=0.0298)
+  smell/fragrance <-> texture/consistency: 0.0273 (weight=0.0273)
+  smell/fragrance <-> packaging: 0.0234 (weight=0.0234)
+  texture/consistency <-> packaging: 0.0217 (weight=0.0217)
 
 COMMUNITY ASSIGNMENTS:
   Community 0: price/value, packaging, service/shipping
@@ -27,7 +27,7 @@ TOP 3 NODES BY PAGERANK:
   packaging: 0.2394
   service/shipping: 0.1284
 
-SMALL-WORLD STRUCTURE: Not Detected (Sigma = 0.6991)
+SMALL-WORLD STRUCTURE: Not Detected (Sigma = 0.7083)
 
 BRIDGE EDGES FOUND (1):
   ingredients <-> effectiveness/results

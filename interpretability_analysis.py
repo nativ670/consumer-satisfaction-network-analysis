@@ -10,6 +10,7 @@ import seaborn as sns
 import statsmodels.api as sm
 from statsmodels.miscmodels.ordinal_model import OrderedModel
 from scipy import stats
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 # Add parent directory to path for imports
 sys.path.append(os.path.abspath('.'))
@@ -90,6 +91,16 @@ def ax_forest(ax, df_model, title):
     ax.set_title(title)
     ax.set_xlabel("Coefficient Estimate (95% CI)")
 
+def plot_confusion_matrix(cm, labels, title, filename):
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=labels, yticklabels=labels)
+    plt.title(title)
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.tight_layout()
+    plt.savefig(f"{OUTPUT_DIR}/{filename}")
+    plt.close()
+
 def run_interpretability_analysis():
     setup_interpretability()
     data = load_and_preprocess_data()
@@ -100,6 +111,7 @@ def run_interpretability_analysis():
     
     # documentation list
     sig_features = {}
+    bic_results = {}
     
     # --- A. Linear Models ---
     logger.info("Fitting Linear Models...")
@@ -109,6 +121,7 @@ def run_interpretability_analysis():
     model_lin_add = sm.OLS(y, X_add).fit()
     df_lin_add = get_statsmodels_summary_df(model_lin_add)
     df_lin_add['model'] = 'Additive'
+    bic_results['Linear Additive'] = model_lin_add.bic
     
     # A2. Interaction
     # Build network on raw scores matrix
@@ -119,6 +132,7 @@ def run_interpretability_analysis():
     model_lin_int = sm.OLS(y, X_int).fit()
     df_lin_int = get_statsmodels_summary_df(model_lin_int)
     df_lin_int['model'] = 'Interaction'
+    bic_results['Linear Interaction'] = model_lin_int.bic
     
     # Merge and add Beta Weights
     df_linear = pd.concat([df_lin_add, df_lin_int])
@@ -181,18 +195,35 @@ def run_interpretability_analysis():
     # --- B. Ordinal Models ---
     logger.info("Fitting Ordinal Models...")
     y_ord = y.astype(int)
+    rating_categories = [1, 2, 3, 4, 5]
     
     # B1. Additive
     model_ord_add = OrderedModel(y_ord, data[base_centered_cols], distr='logit')
     res_ord_add = model_ord_add.fit(method='bfgs', disp=False)
     df_ord_add = get_statsmodels_summary_df(res_ord_add)
     df_ord_add['model'] = 'Additive'
+    bic_results['Ordinal Additive'] = res_ord_add.bic
     
+    # Confusion Matrix (Additive)
+    probs_ord_add = res_ord_add.predict(data[base_centered_cols]).values
+    preds_ord_add = [i + 1 for i in np.argmax(probs_ord_add, axis=1)]
+    cm_ord_add = confusion_matrix(y_ord, preds_ord_add, labels=rating_categories)
+    plot_confusion_matrix(cm_ord_add, rating_categories, "Ordinal Additive Confusion Matrix", "ordinal_add_cm.png")
+    pd.DataFrame(cm_ord_add, index=rating_categories, columns=rating_categories).to_csv(f"{OUTPUT_DIR}/ordinal_add_cm.csv")
+
     # B2. Interaction
     model_ord_int = OrderedModel(y_ord, data_int[base_centered_cols + interaction_cols], distr='logit')
     res_ord_int = model_ord_int.fit(method='bfgs', disp=False)
     df_ord_int = get_statsmodels_summary_df(res_ord_int)
     df_ord_int['model'] = 'Interaction'
+    bic_results['Ordinal Interaction'] = res_ord_int.bic
+
+    # Confusion Matrix (Interaction)
+    probs_ord_int = res_ord_int.predict(data_int[base_centered_cols + interaction_cols]).values
+    preds_ord_int = [i + 1 for i in np.argmax(probs_ord_int, axis=1)]
+    cm_ord_int = confusion_matrix(y_ord, preds_ord_int, labels=rating_categories)
+    plot_confusion_matrix(cm_ord_int, rating_categories, "Ordinal Interaction Confusion Matrix", "ordinal_int_cm.png")
+    pd.DataFrame(cm_ord_int, index=rating_categories, columns=rating_categories).to_csv(f"{OUTPUT_DIR}/ordinal_int_cm.csv")
     
     def label_ord_features(df):
         # A feature is a threshold if it's not in CORE_ASPECTS and doesn't start with int_ and not in base_centered_cols
@@ -290,16 +321,33 @@ def run_interpretability_analysis():
     # --- C. Binary Models ---
     logger.info("Fitting Binary Models...")
     y_bin = (y_ord == 5).astype(int)
+    binary_labels = [0, 1]
     
     # C1. Additive
     model_bin_add = sm.Logit(y_bin, sm.add_constant(data[base_centered_cols])).fit(method='bfgs', maxiter=500, disp=False)
     df_bin_add = get_statsmodels_summary_df(model_bin_add)
     df_bin_add['model'] = 'Additive'
+    bic_results['Binary Additive'] = model_bin_add.bic
     
+    # Confusion Matrix (Additive)
+    probs_bin_add = model_bin_add.predict(sm.add_constant(data[base_centered_cols]))
+    preds_bin_add = (probs_bin_add > 0.5).astype(int)
+    cm_bin_add = confusion_matrix(y_bin, preds_bin_add, labels=binary_labels)
+    plot_confusion_matrix(cm_bin_add, ["1-4 Stars", "5 Stars"], "Binary Additive Confusion Matrix", "binary_add_cm.png")
+    pd.DataFrame(cm_bin_add, index=binary_labels, columns=binary_labels).to_csv(f"{OUTPUT_DIR}/binary_add_cm.csv")
+
     # C2. Interaction
     model_bin_int = sm.Logit(y_bin, sm.add_constant(data_int[base_centered_cols + interaction_cols])).fit(method='bfgs', maxiter=500, disp=False)
     df_bin_int = get_statsmodels_summary_df(model_bin_int)
     df_bin_int['model'] = 'Interaction'
+    bic_results['Binary Interaction'] = model_bin_int.bic
+
+    # Confusion Matrix (Interaction)
+    probs_bin_int = model_bin_int.predict(sm.add_constant(data_int[base_centered_cols + interaction_cols]))
+    preds_bin_int = (probs_bin_int > 0.5).astype(int)
+    cm_bin_int = confusion_matrix(y_bin, preds_bin_int, labels=binary_labels)
+    plot_confusion_matrix(cm_bin_int, ["1-4 Stars", "5 Stars"], "Binary Interaction Confusion Matrix", "binary_int_cm.png")
+    pd.DataFrame(cm_bin_int, index=binary_labels, columns=binary_labels).to_csv(f"{OUTPUT_DIR}/binary_int_cm.csv")
     
     df_binary = pd.concat([df_bin_add, df_bin_int])
     df_binary['odds_ratio'] = np.exp(df_binary['coefficient'])
@@ -398,6 +446,14 @@ def run_interpretability_analysis():
         f.write(f"Interpretability Analysis Run Summary\n")
         f.write(f"Timestamp: {datetime.datetime.now()}\n")
         f.write(f"N reviews used: {N}\n\n")
+        
+        f.write(f"MODEL COMPLEXITY (Full Dataset BIC):\n")
+        f.write(f"{'Model':<25} | {'BIC':<15}\n")
+        f.write(f"{'-'*40}\n")
+        for model_name, bic_val in bic_results.items():
+            f.write(f"{model_name:<25} | {bic_val:,.2f}\n")
+        f.write("\n")
+        
         f.write(f"GLASSO EDGES SELECTED:\n")
         for u, v in edges:
             f.write(f" - {u} <-> {v}\n")

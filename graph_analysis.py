@@ -16,7 +16,7 @@ from sklearn.preprocessing import StandardScaler
 sys.path.append(os.path.abspath('.'))
 
 from src.modeling import prepare_raw_modeling_data, CORE_ASPECTS
-from src.network_builder import construct_partial_correlation_network
+from src.network_builder import construct_partial_correlation_network, select_best_precision_ebic
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -50,32 +50,23 @@ def load_full_data():
     
     return feature_matrix
 
-def estimate_precision_matrix(feature_matrix):
-    """Replicates internal GraphicalLasso logic to get the precision matrix."""
+def estimate_precision_matrix(feature_matrix, gamma=0.5):
+    """Estimates precision matrix using the EBIC selected lambda for consistency."""
     active_aspects = [a for a in feature_matrix.columns if feature_matrix[a].std() > 0]
-    
-    if len(active_aspects) < len(CORE_ASPECTS):
-        logger.warning(f"Some aspects have no variation: {set(CORE_ASPECTS) - set(active_aspects)}")
-
     X = feature_matrix[active_aspects]
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
+    N, P = X.shape
+    X_scaled = StandardScaler().fit_transform(X)
+    S = np.cov(X_scaled.T, bias=True)
     
-    logger.info("Estimating precision matrix using GraphicalLasso...")
-    try:
-        model = GraphicalLassoCV(max_iter=1000, cv=5)
-        model.fit(X_scaled)
-    except Exception as e:
-        logger.warning(f"GraphicalLassoCV failed: {e}. Falling back to standard GraphicalLasso.")
-        model = GraphicalLasso(alpha=0.1, max_iter=1000)
-        model.fit(X_scaled)
+    logger.info("Estimating precision matrix using EBIC (GLASSO)...")
+    best_precision, _ = select_best_precision_ebic(S, N, P, gamma=gamma)
     
     # Create full precision matrix for all CORE_ASPECTS
     full_precision = pd.DataFrame(0.0, index=CORE_ASPECTS, columns=CORE_ASPECTS)
-    prec = model.precision_
-    for i, a1 in enumerate(active_aspects):
-        for j, a2 in enumerate(active_aspects):
-            full_precision.loc[a1, a2] = prec[i, j]
+    if best_precision is not None:
+        for i, a1 in enumerate(active_aspects):
+            for j, a2 in enumerate(active_aspects):
+                full_precision.loc[a1, a2] = best_precision[i, j]
             
     return full_precision
 
