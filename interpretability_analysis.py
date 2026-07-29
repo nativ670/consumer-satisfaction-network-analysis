@@ -398,6 +398,73 @@ def run_interpretability_analysis():
     plt.savefig(f"{OUTPUT_DIR}/binary_ame_plot.png")
     plt.close()
 
+    # --- C_45. Binary Models (4-5 vs 1-3 Stars) ---
+    logger.info("Fitting Binary (4-5 vs 1-3) Models...")
+    y_bin_45 = (y_ord >= 4).astype(int)
+    binary_45_labels = [0, 1]
+    
+    # C_45.1 Additive
+    model_bin45_add = sm.Logit(y_bin_45, sm.add_constant(data[base_centered_cols])).fit(method='bfgs', maxiter=500, disp=False)
+    df_bin45_add = get_statsmodels_summary_df(model_bin45_add)
+    df_bin45_add['model'] = 'Additive'
+    bic_results['Binary_45 Additive'] = model_bin45_add.bic
+    
+    # Confusion Matrix (Additive)
+    probs_bin45_add = model_bin45_add.predict(sm.add_constant(data[base_centered_cols]))
+    preds_bin45_add = (probs_bin45_add > 0.5).astype(int)
+    cm_bin45_add = confusion_matrix(y_bin_45, preds_bin45_add, labels=binary_45_labels)
+    plot_confusion_matrix(cm_bin45_add, ["1-3 Stars", "4-5 Stars"], "Binary (4-5) Additive Confusion Matrix", "binary_45_add_cm.png")
+    pd.DataFrame(cm_bin45_add, index=binary_45_labels, columns=binary_45_labels).to_csv(f"{OUTPUT_DIR}/binary_45_add_cm.csv")
+
+    # C_45.2 Interaction
+    model_bin45_int = sm.Logit(y_bin_45, sm.add_constant(data_int[base_centered_cols + interaction_cols])).fit(method='bfgs', maxiter=500, disp=False)
+    df_bin45_int = get_statsmodels_summary_df(model_bin45_int)
+    df_bin45_int['model'] = 'Interaction'
+    bic_results['Binary_45 Interaction'] = model_bin45_int.bic
+
+    # Confusion Matrix (Interaction)
+    probs_bin45_int = model_bin45_int.predict(sm.add_constant(data_int[base_centered_cols + interaction_cols]))
+    preds_bin45_int = (probs_bin45_int > 0.5).astype(int)
+    cm_bin45_int = confusion_matrix(y_bin_45, preds_bin45_int, labels=binary_45_labels)
+    plot_confusion_matrix(cm_bin45_int, ["1-3 Stars", "4-5 Stars"], "Binary (4-5) Interaction Confusion Matrix", "binary_45_int_cm.png")
+    pd.DataFrame(cm_bin45_int, index=binary_45_labels, columns=binary_45_labels).to_csv(f"{OUTPUT_DIR}/binary_45_int_cm.csv")
+    
+    df_binary_45 = pd.concat([df_bin45_add, df_bin45_int])
+    df_binary_45['odds_ratio'] = np.exp(df_binary_45['coefficient'])
+    df_binary_45['or_ci_lower'] = np.exp(df_binary_45['ci_lower_95'])
+    df_binary_45['or_ci_upper'] = np.exp(df_binary_45['ci_upper_95'])
+    df_binary_45.to_csv(f"{OUTPUT_DIR}/binary_45_coefficients.csv", index=False)
+    
+    sig_features['Binary_45 Additive'] = df_bin45_add[df_bin45_add['significant']]['feature'].tolist()
+    sig_features['Binary_45 Interaction'] = df_bin45_int[df_bin45_int['significant']]['feature'].tolist()
+
+    # C_45.3 Average Marginal Effects (AME)
+    logger.info("Computing Binary (4-5) AME...")
+    ame_45_add = get_ame_df(model_bin45_add, 'Additive')
+    ame_45_int = get_ame_df(model_bin45_int, 'Interaction')
+    
+    df_ame_45 = pd.concat([ame_45_add, ame_45_int])
+    df_ame_45[['feature', 'ame', 'std_error', 'p_value', 'model']].to_csv(f"{OUTPUT_DIR}/binary_45_ame.csv", index=False)
+
+    # C_45.4 Odds Ratio Plot (Binary 4-5)
+    plt.figure(figsize=(12, 8))
+    df_bin45_or = df_binary_45[df_binary_45['feature'].isin(base_centered_cols)]
+    sns.barplot(data=df_bin45_or, x='odds_ratio', y='feature', hue='model')
+    plt.axvline(1, color='black', linestyle='--', alpha=0.5)
+    plt.title("Binary (4-5) Odds Ratios (Main Effects on P(4-5 star))")
+    plt.tight_layout()
+    plt.savefig(f"{OUTPUT_DIR}/binary_45_odds_ratio_plot.png")
+    plt.close()
+
+    # C_45.5 AME Plot
+    plt.figure(figsize=(12, 8))
+    df_ame_45_plot = df_ame_45[df_ame_45['feature'].isin(base_centered_cols)]
+    sns.barplot(data=df_ame_45_plot, x='ame', y='feature', hue='model')
+    plt.title("Average Marginal Effects on P(4-5 star)")
+    plt.tight_layout()
+    plt.savefig(f"{OUTPUT_DIR}/binary_45_ame_plot.png")
+    plt.close()
+
     # --- D. Cross-Model Comparison ---
     logger.info("Performing Cross-Model Comparison...")
     comparison_data = []
@@ -409,6 +476,8 @@ def run_interpretability_analysis():
         row['ordinal_int_or'] = df_ordinal[(df_ordinal['feature'] == aspect) & (df_ordinal['model'] == 'Interaction')]['odds_ratio'].values[0]
         row['binary_add_or'] = df_binary[(df_binary['feature'] == aspect) & (df_binary['model'] == 'Additive')]['odds_ratio'].values[0]
         row['binary_int_or'] = df_binary[(df_binary['feature'] == aspect) & (df_binary['model'] == 'Interaction')]['odds_ratio'].values[0]
+        row['binary_45_add_or'] = df_binary_45[(df_binary_45['feature'] == aspect) & (df_binary_45['model'] == 'Additive')]['odds_ratio'].values[0]
+        row['binary_45_int_or'] = df_binary_45[(df_binary_45['feature'] == aspect) & (df_binary_45['model'] == 'Interaction')]['odds_ratio'].values[0]
         comparison_data.append(row)
     pd.DataFrame(comparison_data).to_csv(f"{OUTPUT_DIR}/cross_model_comparison.csv", index=False)
 
@@ -428,15 +497,18 @@ def run_interpretability_analysis():
         l_row = df_lin_int[df_lin_int['feature'] == feat]
         o_row = df_ord_int[df_ord_int['feature'] == feat]
         b_row = df_bin_int[df_bin_int['feature'] == feat]
+        b45_row = df_bin45_int[df_bin45_int['feature'] == feat]
         l_c, l_p = l_row['coefficient'].values[0], l_row['p_value'].values[0]
         o_c, o_p = o_row['coefficient'].values[0], o_row['p_value'].values[0]
         b_c, b_p = b_row['coefficient'].values[0], b_row['p_value'].values[0]
-        consistent = (np.sign(l_c) == np.sign(o_c) == np.sign(b_c))
+        b45_c, b45_p = b45_row['coefficient'].values[0], b45_row['p_value'].values[0]
+        consistent = (np.sign(l_c) == np.sign(o_c) == np.sign(b_c) == np.sign(b45_c))
         inter_summary.append({
             'interaction_pair': feat,
             'linear_coef': l_c, 'linear_p': l_p,
             'ordinal_coef': o_c, 'ordinal_p': o_p,
             'binary_coef': b_c, 'binary_p': b_p,
+            'binary_45_coef': b45_c, 'binary_45_p': b45_p,
             'consistent_sign': consistent
         })
     pd.DataFrame(inter_summary).to_csv(f"{OUTPUT_DIR}/interaction_summary.csv", index=False)

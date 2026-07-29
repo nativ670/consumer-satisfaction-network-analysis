@@ -281,6 +281,97 @@ def run_binary_cv(df):
         
     return results
 
+def run_binary_45_cv(df):
+    """
+    Performs 5-fold CV for Binary Logistic Regression (Additive & Interaction).
+    Target: 4-5 stars = 1, 1-3 stars = 0.
+    
+    This is a separate binary model with a different threshold than run_binary_cv(),
+    which uses 5-stars vs. 1-4 stars.
+    
+    Args:
+        df (pd.DataFrame): DataFrame with 'aspect_sentiments' and 'rating'.
+        
+    Returns:
+        dict: Dictionary with 'additive' and 'interaction' keys, each containing
+              a list of per-fold metric dictionaries (accuracy, roc_auc, f1, bic,
+              confusion_matrix).
+    """
+    raw_data = prepare_raw_modeling_data(df)
+    
+    # Binarize target: 4-5 stars = 1, 1-3 stars = 0
+    raw_data['binary_rating_45'] = (raw_data['rating'] >= 4).astype(int)
+    
+    kf = KFold(n_splits=5, shuffle=True, random_state=42)
+    
+    results = {
+        'additive': [],
+        'interaction': []
+    }
+    
+    logger.info("Starting Binary (4-5 vs 1-3) Logistic Regression Cross-Validation...")
+    
+    fold = 1
+    for train_index, test_index in kf.split(raw_data):
+        logger.info(f"Processing Fold {fold}/5 (Binary 4-5)...")
+        
+        train_df = raw_data.iloc[train_index].copy()
+        test_df = raw_data.iloc[test_index].copy()
+        
+        # Centering (Leakage-Free)
+        train_means = train_df[CORE_ASPECTS].mean()
+        for col in CORE_ASPECTS:
+            train_df[f"{col}_centered"] = train_df[col] - train_means[col]
+            test_df[f"{col}_centered"] = test_df[col] - train_means[col]
+            
+        y_train = train_df['binary_rating_45']
+        y_test = test_df['binary_rating_45']
+        
+        base_centered_cols = [f"{col}_centered" for col in CORE_ASPECTS]
+        
+        # 1. Additive Model
+        X_train_base = sm.add_constant(train_df[base_centered_cols])
+        X_test_base = sm.add_constant(test_df[base_centered_cols])
+        
+        # Use statsmodels for BIC consistency
+        model_add = sm.Logit(y_train, X_train_base).fit(disp=False)
+        
+        probs_add = model_add.predict(X_test_base)
+        preds_add = (probs_add > 0.5).astype(int)
+        
+        results['additive'].append({
+            'accuracy': accuracy_score(y_test, preds_add),
+            'roc_auc': roc_auc_score(y_test, probs_add),
+            'f1': f1_score(y_test, preds_add),
+            'bic': model_add.bic,
+            'confusion_matrix': confusion_matrix(y_test, preds_add, labels=[0, 1])
+        })
+        
+        # 2. Interaction Model
+        G_fold = construct_partial_correlation_network(train_df[CORE_ASPECTS])
+        train_df_int, interaction_cols = get_network_interactions(train_df, G_fold)
+        test_df_int, _ = get_network_interactions(test_df, G_fold)
+        
+        X_train_net = sm.add_constant(train_df_int[base_centered_cols + interaction_cols])
+        X_test_net = sm.add_constant(test_df_int[base_centered_cols + interaction_cols])
+        
+        model_int = sm.Logit(y_train, X_train_net).fit(disp=False)
+        
+        probs_int = model_int.predict(X_test_net)
+        preds_int = (probs_int > 0.5).astype(int)
+        
+        results['interaction'].append({
+            'accuracy': accuracy_score(y_test, preds_int),
+            'roc_auc': roc_auc_score(y_test, probs_int),
+            'f1': f1_score(y_test, preds_int),
+            'bic': model_int.bic,
+            'confusion_matrix': confusion_matrix(y_test, preds_int, labels=[0, 1])
+        })
+        
+        fold += 1
+        
+    return results
+
 def get_existing_results():
     """
     Returns the already-saved results for Linear models.
@@ -356,10 +447,13 @@ if __name__ == "__main__":
     # Run CV and save
     ord_res = run_ordinal_cv(df)
     bin_res = run_binary_cv(df)
+    bin45_res = run_binary_45_cv(df)
     
     with open('model_ordinal_results.pkl', 'wb') as f:
         pickle.dump(ord_res, f)
     with open('model_binary_results.pkl', 'wb') as f:
         pickle.dump(bin_res, f)
+    with open('model_binary_45_results.pkl', 'wb') as f:
+        pickle.dump(bin45_res, f)
     
     logger.info("Full analysis and diagnostics complete.")
