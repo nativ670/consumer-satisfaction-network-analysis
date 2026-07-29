@@ -1,5 +1,5 @@
 Interpretability Analysis Run Summary
-Timestamp: 2026-06-04 10:44:10.908542
+Timestamp: 2026-07-26 16:06:26.739184
 N reviews used: 322133
 
 MODEL COMPLEXITY (Full Dataset BIC):
@@ -11,6 +11,8 @@ Ordinal Additive          | 676,031.06
 Ordinal Interaction       | 675,907.60
 Binary Additive           | 344,530.03
 Binary Interaction        | 343,813.62
+Binary_45 Additive        | 278,044.79
+Binary_45 Interaction     | 278,038.75
 
 GLASSO EDGES SELECTED:
  - smell/fragrance <-> texture/consistency
@@ -32,3 +34,5 @@ SIGNIFICANT COEFFICIENTS PER MODEL:
  - Ordinal Interaction: smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered, int_smell_fragrance_texture_consistency, int_smell_fragrance_packaging, int_smell_fragrance_ingredients, int_price_value_packaging, int_price_value_service_shipping, int_texture_consistency_ingredients, int_packaging_ingredients, int_ingredients_effectiveness_results
  - Binary Additive: const, smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered
  - Binary Interaction: const, smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered, int_smell_fragrance_texture_consistency, int_smell_fragrance_packaging, int_smell_fragrance_ingredients, int_price_value_packaging, int_price_value_service_shipping, int_texture_consistency_packaging, int_texture_consistency_ingredients, int_packaging_ingredients, int_packaging_service_shipping, int_ingredients_effectiveness_results, int_ingredients_service_shipping
+ - Binary_45 Additive: const, smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered
+ - Binary_45 Interaction: const, smell/fragrance_centered, price/value_centered, texture/consistency_centered, packaging_centered, ingredients_centered, effectiveness/results_centered, service/shipping_centered, int_smell_fragrance_texture_consistency, int_smell_fragrance_packaging, int_smell_fragrance_ingredients, int_price_value_service_shipping, int_packaging_ingredients, int_packaging_service_shipping, int_ingredients_service_shipping
