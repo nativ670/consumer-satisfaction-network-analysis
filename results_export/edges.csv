@@ -1,0 +1,12 @@
+node_1,node_2,partial_correlation
+smell/fragrance,texture/consistency,0.0273
+smell/fragrance,packaging,0.0234
+smell/fragrance,ingredients,0.0547
+price/value,packaging,0.0652
+price/value,service/shipping,0.0375
+texture/consistency,packaging,0.0217
+texture/consistency,ingredients,0.0298
+packaging,ingredients,0.0778
+packaging,service/shipping,0.055
+ingredients,effectiveness/results,0.0518
+ingredients,service/shipping,0.0312

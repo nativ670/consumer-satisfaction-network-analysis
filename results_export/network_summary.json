@@ -1,0 +1,15 @@
+{
+  "num_nodes": 7,
+  "num_edges": 11,
+  "density": 0.5238095238095238,
+  "transitivity": 0.6,
+  "small_world_sigma": 0.69519204372289,
+  "is_small_world": false,
+  "bridge_edges": [
+    {
+      "node_1": "ingredients",
+      "node_2": "effectiveness/results"
+    }
+  ],
+  "ebic_selected_lambda": 0.001
+}

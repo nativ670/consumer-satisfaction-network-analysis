@@ -1,0 +1,8 @@
+term,chi2,df,p_value,violates_at_005
+smell/fragrance_centered,8111.50756867969,3,0.0,True
+price/value_centered,16213.79353037551,3,0.0,True
+texture/consistency_centered,20222.950398673438,3,0.0,True
+packaging_centered,3943.3996263867143,3,0.0,True
+ingredients_centered,9099.935292995064,3,0.0,True
+effectiveness/results_centered,32998.23935531624,3,0.0,True
+service/shipping_centered,3685.2673519713735,3,0.0,True

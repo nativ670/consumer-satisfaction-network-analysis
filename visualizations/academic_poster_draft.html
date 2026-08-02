@@ -123,181 +123,147 @@
             </div>
         </header>
 
-        <!-- MAIN LAYOUT: Introduction -->
+        <!-- MAIN LAYOUT: Background & Research Questions -->
         <section class="mb-6 shrink-0">
             <div class="section-header">
-                <i data-lucide="book-open"></i> Introduction
+                <i data-lucide="book-open"></i> Background & Research Questions
             </div>
-            <div class="grid grid-cols-2 gap-x-12 px-2">
-                <ul class="bullet-list">
-                    <li><b>The Multi-Attribute Problem:</b> Traditional models assume satisfaction is a simple sum of independent feature weights<sup>3</sup>.</li>
-                    <li><b>Cognitive Interdependence:</b> The Halo Effect & Spreading Activation theory tell us that consumers evaluate attributes interactively using compensatory heuristics<sup>6,2</sup>.</li>
-                </ul>
-                <ul class="bullet-list">
-                    <li><b>Network Paradigm:</b> Reconceptualizing satisfaction as an emergent property of a dynamic interacting attribute network<sup>1</sup>.</li>
-                    <li><b>The J-Shaped Paradox:</b> Review distributions indicate that consumer evaluation reflects polarized behavioural groups rather than a continuous state<sup>4</sup>.</li>
-                </ul>
+            <div class="bg-slate-50/50 p-6 rounded-3xl border border-slate-100 px-8">
+                <div class="grid grid-cols-2 gap-x-16">
+                    <ul class="bullet-list">
+                        <li><b>The Multi-Attribute Problem:</b> Traditional models assume satisfaction is a simple sum of independent feature weights<sup>3</sup>.</li>
+                        <li><b>Cognitive Interdependence:</b> The Halo Effect & Spreading Activation theory tell us that consumers evaluate attributes interactively using compensatory heuristics<sup>6,2</sup>.</li>
+                    </ul>
+                    <ul class="bullet-list">
+                        <li><b>Network Paradigm:</b> Reconceptualizing satisfaction as an emergent property of a dynamic interacting attribute network<sup>1</sup>.</li>
+                        <li><b>The J-Shaped Paradox:</b> Review distributions indicate that consumer evaluation reflects polarized behavioural groups rather than a continuous state<sup>4</sup>.</li>
+                    </ul>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-10 mt-6 pt-6 border-t border-slate-200/60">
+                    <div class="flex items-start">
+                        <span class="bg-indigo-600 text-white font-black text-xs px-2 py-1 rounded mr-4 mt-1 shrink-0 shadow-sm">TH</span>
+                        <p class="editable-text text-[15px] leading-relaxed mb-0 font-semibold text-slate-800">
+                            Are consumer evaluations based on independent product attributes or on interacting cognitive schemas?
+                        </p>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-teal-600 text-white font-black text-xs px-2 py-1 rounded mr-4 mt-1 shrink-0 shadow-sm">OP</span>
+                        <p class="editable-text text-[15px] leading-relaxed mb-0 font-semibold text-slate-800">
+                            Does incorporating network interactions improve the modeling of customer satisfaction compared with additive approaches?
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- ROW 2: QUESTIONS | METHODOLOGY -->
-        <div class="grid grid-cols-2 gap-10 mb-6 shrink-0">
+        <!-- ROW 2: METHODOLOGY (HORIZONTAL 3-STEPS) -->
+        <section class="mb-6 shrink-0 px-2">
+            <div class="section-header bg-slate-800">
+                <i data-lucide="cog"></i> Research Methodology
+            </div>
 
-            <!-- LEFT COLUMN: Research Questions -->
-            <section class="flex flex-col h-full">
-                <div class="section-header bg-indigo-900">
-                    <i data-lucide="target"></i> Research Objectives
-                </div>
-                <div class="bg-gradient-to-br from-indigo-50/50 to-white border border-indigo-100 p-6 rounded-3xl h-full flex flex-col justify-center relative overflow-hidden shadow-sm">
-                    <div class="absolute -right-8 -bottom-8 text-indigo-50 opacity-20">
-                        <i data-lucide="help-circle" class="w-48 h-48"></i>
-                    </div>
-                    <div class="relative z-10 space-y-4">
-                        <div class="flex items-start">
-                            <span class="bg-indigo-600 text-white font-black text-xs px-2 py-1 rounded mr-4 mt-1 shrink-0">TH</span>
-                            <p class="editable-text text-[15px] leading-relaxed mb-0 font-semibold text-slate-800">
-                                Are consumer evaluations based on independent product attributes or on interacting cognitive schemas?
-                            </p>
-                        </div>
-                        <div class="flex items-start">
-                            <span class="bg-teal-600 text-white font-black text-xs px-2 py-1 rounded mr-4 mt-1 shrink-0">OP</span>
-                            <p class="editable-text text-[15px] leading-relaxed mb-0 font-semibold text-slate-800">
-                                Does incorporating network interactions improve the modeling of customer satisfaction compared with additive approaches?
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- RIGHT COLUMN: Methodology -->
-            <section class="flex flex-col">
-                <div class="section-header bg-slate-800">
-                    <i data-lucide="cog"></i> Research Methodology
-                </div>
-
-                <!-- Section 1: Data & Processing -->
-                <div class="mb-8 relative z-10 px-2">
-                    <div class="flex items-center text-blue-800 mb-4 font-bold text-sm uppercase tracking-[0.15em] border-l-4 border-indigo-500 pl-3">
-                        Step 1: NLP Pipeline
-                    </div>
-                    
-                    <div class="flex flex-row justify-center items-center gap-4">
-                        <!-- Dataset Card -->
-                        <div class="bg-white border-2 border-indigo-50 rounded-2xl p-4 flex items-start w-[48%] shadow-sm">
-                            <i data-lucide="database" class="text-indigo-500 mr-3 mt-1 shrink-0 w-8 h-8"></i>
+            <div class="flex flex-row items-stretch gap-6 relative pt-4 pb-2">
+                
+                <!-- Step 1: Data & Processing -->
+                <div class="flex-1 relative">
+                    <div class="bg-white border-2 border-slate-100 rounded-[2rem] p-5 shadow-sm h-full flex flex-col gap-4 relative">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-indigo-50 p-2 rounded-2xl">
+                                <i data-lucide="database" class="text-indigo-600 w-8 h-8 shrink-0"></i>
+                            </div>
                             <div>
-                                <h3 class="font-bold text-[15px] text-slate-800">Amazon '23</h3>
-                                <span class="inline-block bg-slate-100 text-slate-700 text-[11px] font-bold px-2 py-0.5 rounded border border-slate-200 mt-1">
-                                    322k reviews
-                                </span>
+                                <h5 class="font-bold text-[18px] text-slate-900 mb-1">Amazon Reviews '23</h5>
+                                <p class="text-[13px] text-slate-600 leading-snug font-medium">322,133 customer reviews and ratings analyzed</p>
                             </div>
                         </div>
-
-                        <i data-lucide="arrow-right" class="text-slate-300 w-6 h-6 shrink-0"></i>
-
-                        <!-- NLP Card -->
-                        <div class="bg-white border-2 border-indigo-50 rounded-2xl p-4 flex items-start w-[48%] shadow-sm h-full">
-                            <i data-lucide="search-code" class="text-indigo-500 mr-3 mt-1 shrink-0 w-8 h-8"></i>
+                        <div class="flex justify-center -my-2">
+                            <i data-lucide="arrow-down" class="text-indigo-100 w-8 h-8"></i>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-teal-50 p-2 rounded-2xl">
+                                <i data-lucide="search-code" class="text-teal-600 w-8 h-8 shrink-0"></i>
+                            </div>
                             <div>
-                                <h3 class="font-bold text-[15px] text-slate-800 leading-tight mb-1">Feature Extraction</h3>
-                                <p class="text-[11px] text-slate-500 font-medium">Text to sentiment</p>
+                                <h5 class="font-bold text-[18px] text-slate-900 mb-1">NLP: Feature Extraction</h5>
+                                <p class="text-[13px] text-slate-600 leading-snug font-medium">Multi-attribute sentiment scoring</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Section 2: Research Design -->
-                <div class="px-2">
-                    <div class="flex items-center text-slate-800 mb-4 font-bold text-sm uppercase tracking-[0.15em] border-l-4 border-teal-500 pl-3">
-                        Step 2: Modeling Design
+                <div class="flex items-center">
+                    <div class="bg-slate-50 p-2 rounded-full border border-slate-100 shadow-sm">
+                        <i data-lucide="chevron-right" class="text-indigo-300 w-8 h-8"></i>
                     </div>
-                    
-                    <div class="grid grid-cols-2 gap-6 items-stretch">
-                        
-                        <!-- Baseline Track -->
-                        <div class="bg-orange-50/40 border-2 border-orange-100 rounded-2xl p-4 relative flex flex-col shadow-sm">
-                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white text-orange-700 px-3 py-0.5 rounded-full text-[10px] font-bold border-2 border-orange-200 shadow-sm whitespace-nowrap uppercase tracking-wider">
-                                Additive Track
-                            </div>
-                            
-                            <div class="flex flex-col h-full mt-4">
-                                <div class="flex items-center space-x-3 bg-white border border-orange-100 rounded-xl p-3 shadow-sm">
-                                    <i data-lucide="layers" class="text-orange-500 w-6 h-6 shrink-0"></i>
-                                    <div>
-                                        <h3 class="font-bold text-[13px] text-orange-900 leading-tight">Isolated Effects</h3>
-                                        <p class="text-[10px] text-orange-700 font-medium mt-0.5">Independent attributes</p>
-                                    </div>
-                                </div>
+                </div>
 
-                                <div class="flex justify-center py-2">
-                                    <i data-lucide="arrow-down" class="text-orange-200 w-6 h-6"></i>
-                                </div>
-                                
-                                <div class="bg-white border border-orange-100 rounded-xl p-3 w-full text-center shadow-sm mt-auto">
-                                    <h4 class="font-bold text-[12px] text-slate-800 leading-tight">Standard Regressions</h4>
-                                    <p class="text-[9px] text-orange-600 uppercase tracking-widest font-black mt-1">Linear/Ord/Bin</p>
-                                </div>
+                <!-- Step 2: Network Building -->
+                <div class="flex-1 relative">
+                    <div class="bg-indigo-50/20 border-2 border-indigo-100 rounded-[2rem] p-5 shadow-sm h-full flex flex-col gap-3 relative">
+                        <div class="flex items-center gap-3 mb-1">
+                            <div class="bg-indigo-500/80 p-2 rounded-2xl shadow-sm">
+                                <i data-lucide="network" class="text-white w-8 h-8 shrink-0"></i>
                             </div>
+                            <h5 class="font-bold text-[18px] text-slate-900">Network Building</h5>
                         </div>
-
-                        <!-- Network Interaction Track -->
-                        <div class="bg-indigo-50/40 border-2 border-indigo-100 rounded-2xl p-4 relative flex flex-col shadow-sm">
-                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white text-indigo-700 px-3 py-0.5 rounded-full text-[10px] font-bold border-2 border-indigo-100 shadow-sm whitespace-nowrap uppercase tracking-wider">
-                                Network Track
+                        <div class="bg-white border border-indigo-100 rounded-2xl p-3 text-center shadow-sm">
+                             <h6 class="font-bold text-[15px] text-slate-800 mb-1">GLASSO Estimation</h6>
+                             <p class="text-[11px] text-indigo-500 uppercase font-black tracking-widest">Selection via EBIC</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mt-1">
+                            <div class="bg-white border border-indigo-100 rounded-2xl p-2 text-center shadow-sm">
+                                <i data-lucide="git-commit" class="text-indigo-400 w-4 h-4 mx-auto mb-1"></i>
+                                <h6 class="font-bold text-[13px] text-slate-800">Tie Strength</h6>
+                                <p class="text-[10px] text-indigo-600 font-bold uppercase tracking-tighter">Trade-offs</p>
                             </div>
-                            
-                            <div class="flex flex-col h-full mt-4">
-                                <div class="flex items-center space-x-3 bg-white border border-indigo-100 rounded-xl p-3 shadow-sm">
-                                    <i data-lucide="network" class="text-indigo-600 w-6 h-6 shrink-0"></i>
-                                    <div>
-                                        <h3 class="font-bold text-[13px] text-indigo-900 leading-tight">GLASSO Estimation</h3>
-                                        <p class="text-[10px] text-indigo-700 font-medium mt-0.5">Selection via EBIC</p>
-                                    </div>
-                                </div>
-
-                                <div class="flex justify-center py-2">
-                                    <i data-lucide="arrow-down" class="text-indigo-200 w-6 h-6"></i>
-                                </div>
-                                
-                                <div class="bg-white border border-indigo-100 rounded-xl p-3 w-full text-center shadow-sm mt-auto">
-                                    <h4 class="font-bold text-[12px] text-slate-800 leading-tight">Interaction Modeling</h4>
-                                    <p class="text-[9px] text-indigo-600 uppercase tracking-widest font-black mt-1">Guided by Network</p>
-                                </div>
+                            <div class="bg-white border border-indigo-100 rounded-2xl p-2 text-center shadow-sm">
+                                <i data-lucide="star" class="text-indigo-400 w-4 h-4 mx-auto mb-1"></i>
+                                <h6 class="font-bold text-[13px] text-slate-800">Centrality</h6>
+                                <p class="text-[10px] text-indigo-600 font-bold uppercase tracking-tighter">Primary Drivers</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
+
+                <div class="flex items-center">
+                    <div class="bg-slate-50 p-2 rounded-full border border-slate-100 shadow-sm">
+                        <i data-lucide="chevron-right" class="text-indigo-300 w-8 h-8"></i>
+                    </div>
+                </div>
+
+                <!-- Step 3: Comparative Regression -->
+                <div class="flex-1 relative">
+                    <div class="bg-white border-2 border-slate-100 rounded-[2rem] p-5 shadow-sm h-full flex flex-col gap-3 relative">
+                        <div class="bg-orange-50/50 border border-orange-100 rounded-2xl p-4 flex-1 flex flex-col justify-center text-center">
+                            <i data-lucide="layers" class="text-orange-500 mb-1 w-6 h-6 mx-auto"></i>
+                            <h5 class="font-bold text-[15px] text-orange-950 leading-tight">Additive Regression</h5>
+                            <p class="text-[11px] text-orange-800 font-bold uppercase tracking-wide mt-1">Isolated Main Effects</p>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <span class="text-slate-300 font-black text-[11px] italic uppercase tracking-[0.2em] bg-white px-3 relative z-10">vs</span>
+                            <div class="h-px bg-slate-100 w-full absolute"></div>
+                        </div>
+                        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 flex-1 flex flex-col justify-center text-center shadow-sm">
+                            <i data-lucide="trending-up" class="text-indigo-600 mb-1 w-6 h-6 mx-auto"></i>
+                            <h5 class="font-bold text-[15px] text-indigo-900 leading-tight">Network Interaction</h5>
+                            <p class="text-[11px] text-indigo-700 font-bold uppercase tracking-wide mt-1">Interacting Heuristics</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
 
         <!-- ROW 3: RESULTS (Network + Tables) -->
-        <section class="mb-6 border-t-2 border-slate-100 pt-6 shrink-0">
+        <section class="mb-6 pt-6 shrink-0">
             <div class="section-header bg-teal-900">
                 <i data-lucide="activity"></i> Results
             </div>
             
             <div class="grid grid-cols-2 gap-10 items-stretch">
-                <!-- Left: Network Graph & Findings -->
+                <!-- Left: Benchmarks -->
                 <div class="flex flex-col">
-                    <h3 class="text-[13px] font-black uppercase tracking-[0.2em] text-center text-slate-400 mb-4">The Cognitive Map</h3>
-                    <div id="network-canvas" class="relative shadow-inner border border-slate-100 rounded-[2rem] bg-slate-50/50 mb-4 overflow-hidden" style="height: 320px;">
-                        <!-- D3 Graph will render here -->
-                    </div>
-                    <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-xl relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-teal-500 opacity-10 rounded-full -mr-16 -mt-16"></div>
-                        <h4 class="font-black text-teal-400 mb-2 uppercase tracking-widest text-[14px]">Synthesis of Findings</h4>
-                        <ul class="text-[14px] leading-relaxed text-slate-300 mb-0 space-y-1 list-disc pl-5">
-                            <li>Two aspect clusters emerged: <b>External/Logistical</b> and <b>Internal/Sensory</b>.</li>
-                            <li>Most interaction coefficients were <b>negative</b>.</li>
-                            <li>The ordinal model predominantly predicted extreme ratings (1★ and 5★).</li>
-                            <li>Interaction terms improved model fit but did not improve predictive performance in the binary and ordinal framework.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Right: Benchmarks -->
-                <div class="flex flex-col">
-                    <h3 class="text-[13px] font-black uppercase tracking-[0.2em] text-center text-slate-400 mb-4">Model Performance & Fit</h3>
                     <div class="space-y-4 flex-grow flex flex-col justify-center">
                         
                         <!-- Table 1: Linear -->
@@ -368,11 +334,28 @@
 
                     </div>
                 </div>
+
+                <!-- Right: Network Graph & Findings -->
+                <div class="flex flex-col">
+                    <div id="network-canvas" class="relative shadow-inner border border-slate-100 rounded-[2rem] bg-slate-50/50 mb-4 overflow-hidden" style="height: 320px;">
+                        <!-- D3 Graph will render here -->
+                    </div>
+                    <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-teal-500 opacity-10 rounded-full -mr-16 -mt-16"></div>
+                        <h4 class="font-black text-teal-400 mb-2 uppercase tracking-widest text-[14px]">Synthesis of Findings</h4>
+                        <ul class="text-[14px] leading-relaxed text-slate-300 mb-0 space-y-1 list-disc pl-5">
+                            <li>Two aspect clusters emerged: <b>External/Logistical</b> and <b>Internal/Sensory</b>.</li>
+                            <li>Most interaction coefficients were <b>negative</b>.</li>
+                            <li>The ordinal model predominantly predicted extreme ratings (1★ and 5★).</li>
+                            <li>Interaction terms improved model fit but did not improve predictive performance in the binary and ordinal framework.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- ROW 4: DISCUSSION | REFERENCES -->
-        <section class="border-t-2 border-slate-100 pt-6 flex-grow">
+        <section class="pt-6 flex-grow">
             <div class="grid grid-cols-2 gap-16 h-full">
                 
                 <!-- Discussion -->
@@ -449,8 +432,8 @@
             .selectAll("line")
             .data(linksData)
             .enter().append("line")
-            .attr("stroke", "#e2e8f0")
-            .attr("stroke-opacity", 0.6)
+            .attr("stroke", "#94a3b8")
+            .attr("stroke-opacity", 0.8)
             .attr("stroke-width", d => linkScale(d.value));
 
         const node = svg.append("g")
@@ -473,8 +456,8 @@
         node.append("text")
             .attr("dy", ".35em")
             .attr("text-anchor", "middle")
-            .text(d => d.id)
-            .style("font-size", "11px")
+            .text(d => d.id.split('/')[0])
+            .style("font-size", "12px")
             .style("font-weight", "800")
             .style("fill", "#1e293b")
             .style("pointer-events", "none")

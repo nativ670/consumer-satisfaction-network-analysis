@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Models for Consumer Satisfaction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* Cleaner for print */
+        }
+    </style>
+</head>
+<body class="min-h-screen py-10 px-4 sm:px-8 flex justify-center items-start text-slate-800">
+
+    <div class="w-full max-w-5xl bg-white p-6 sm:p-10 rounded-2xl border border-slate-100 relative overflow-hidden">
+        
+        <!-- Header Ribbon -->
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-indigo-500 to-teal-500"></div>
+
+        <div class="text-center mb-12 mt-4">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">Predictive Models for Consumer Satisfaction</h1>
+            <p class="text-sm sm:text-base text-slate-500 font-bold uppercase tracking-widest">Methodological Pipeline & Benchmarks</p>
+        </div>
+
+        <!-- Section 1: Data & Processing -->
+        <div class="mb-14 relative z-10">
+            <div class="flex items-center text-blue-800 mb-6 font-bold text-xl uppercase tracking-wide border-b-2 border-blue-100 pb-2">
+                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg mr-3 shadow-sm">1</span> Data & Processing
+            </div>
+            
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6">
+                <!-- Dataset Card -->
+                <div class="bg-slate-50 border-2 border-blue-100 rounded-xl p-5 flex items-start w-full sm:w-[45%] shadow-sm">
+                    <i data-lucide="database" class="text-blue-500 mr-4 mt-1 shrink-0 w-10 h-10"></i>
+                    <div>
+                        <h3 class="font-bold text-lg text-slate-800">Amazon Reviews '23</h3>
+                        <p class="text-sm text-slate-500 mb-2">Dataset of customer reviews and ratings</p>
+                        <span class="inline-block bg-slate-200/70 text-slate-700 text-xs font-bold px-2.5 py-1 rounded-md border border-slate-300 shadow-sm">
+                            322,133 reviews analyzed
+                        </span>
+                    </div>
+                </div>
+
+                <i data-lucide="arrow-right" class="text-slate-300 w-8 h-8 hidden sm:block shrink-0"></i>
+                <i data-lucide="arrow-down" class="text-slate-300 w-8 h-8 sm:hidden shrink-0"></i>
+
+                <!-- NLP Card -->
+                <div class="bg-slate-50 border-2 border-blue-100 rounded-xl p-5 flex items-start w-full sm:w-[45%] shadow-sm h-full">
+                    <i data-lucide="search-code" class="text-blue-500 mr-4 mt-1 shrink-0 w-10 h-10"></i>
+                    <div>
+                        <h3 class="font-bold text-lg text-slate-800 leading-tight mb-1">NLP: Feature Extraction</h3>
+                        <p class="text-sm text-slate-500">Converting text into sentiment scores</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Research Design -->
+        <div class="mb-14">
+            <div class="flex items-center text-slate-800 mb-6 font-bold text-xl uppercase tracking-wide border-b-2 border-slate-200 pb-2">
+                <span class="bg-slate-200 text-slate-700 px-3 py-1 rounded-lg mr-3 shadow-sm">2</span> Research Design
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mt-4">
+                
+                <!-- Baseline Track -->
+                <div class="bg-orange-50/70 border-2 border-orange-200 rounded-2xl p-6 relative flex flex-col shadow-sm">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-white text-orange-700 px-5 py-1.5 rounded-full font-bold border-2 border-orange-200 shadow-sm whitespace-nowrap">
+                        Baseline Additive Track
+                    </div>
+                    
+                    <div class="flex flex-col h-full mt-6">
+                        <div class="flex items-center justify-center space-x-4 bg-white border border-orange-200 rounded-xl p-4 shadow-sm mx-2">
+                            <i data-lucide="layers" class="text-orange-500 w-8 h-8"></i>
+                            <div>
+                                <h3 class="font-bold text-lg text-orange-900">Isolated Attributes</h3>
+                                <p class="text-xs text-orange-700">Main effects evaluated independently</p>
+                            </div>
+                        </div>
+
+                        <div class="flex-grow flex flex-col justify-center items-center py-6">
+                            <i data-lucide="arrow-down" class="text-orange-300 w-8 h-8"></i>
+                        </div>
+                        
+                        <div class="bg-white border border-orange-200 rounded-xl p-5 w-full text-center shadow-sm mt-auto">
+                            <div class="flex justify-center space-x-2 text-orange-500 mb-2">
+                                <i data-lucide="trending-up" class="w-5 h-5"></i>
+                                <i data-lucide="sliders" class="w-5 h-5"></i>
+                                <i data-lucide="binary" class="w-5 h-5"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800">Linear, Ordinal & Binary</h4>
+                            <p class="text-[10px] text-orange-600 uppercase tracking-wider font-semibold mt-1">Additive Regressions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network Interaction Track -->
+                <div class="bg-indigo-50/70 border-2 border-indigo-200 rounded-2xl p-6 relative flex flex-col shadow-sm">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-white text-indigo-700 px-5 py-1.5 rounded-full font-bold border-2 border-indigo-200 shadow-sm whitespace-nowrap">
+                        Network Interaction Track
+                    </div>
+                    
+                    <div class="flex flex-col h-full mt-6">
+                        <div class="flex items-center justify-center space-x-4 bg-white border border-indigo-200 rounded-xl p-4 shadow-sm mx-2">
+                            <i data-lucide="network" class="text-indigo-600 w-8 h-8"></i>
+                            <div>
+                                <h3 class="font-bold text-lg text-indigo-900">Network Estimation</h3>
+                                <p class="text-xs text-indigo-700">GLASSO using EBIC</p>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center pt-4 pb-2 px-2">
+                            <div class="bg-white border border-indigo-200 rounded-lg p-3 w-[48%] text-center shadow-sm">
+                                <i data-lucide="git-commit" class="text-indigo-500 mx-auto mb-1 w-5 h-5"></i>
+                                <h4 class="font-bold text-sm text-slate-800 leading-tight">Tie Strength</h4>
+                                <p class="text-[10px] text-indigo-600 uppercase tracking-wider font-semibold mt-1">Maps Trade-offs</p>
+                            </div>
+                            
+                            <div class="bg-white border border-indigo-200 rounded-lg p-3 w-[48%] text-center shadow-sm">
+                                <i data-lucide="star" class="text-indigo-500 mx-auto mb-1 w-5 h-5"></i>
+                                <h4 class="font-bold text-sm text-slate-800 leading-tight">Centrality</h4>
+                                <p class="text-[10px] text-indigo-600 uppercase tracking-wider font-semibold mt-1">Primary Drivers</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-grow flex flex-col justify-center items-center py-2">
+                            <i data-lucide="arrow-down" class="text-indigo-300 w-8 h-8"></i>
+                        </div>
+                        
+                        <div class="bg-white border border-indigo-200 rounded-xl p-5 w-full text-center shadow-sm mt-auto">
+                            <div class="flex justify-center space-x-2 text-indigo-600 mb-2">
+                                <i data-lucide="trending-up" class="w-5 h-5"></i>
+                                <i data-lucide="sliders" class="w-5 h-5"></i>
+                                <i data-lucide="binary" class="w-5 h-5"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800">Network-Guided Regressions</h4>
+                            <p class="text-[10px] text-indigo-600 uppercase tracking-wider font-semibold mt-1">Linear, Ordinal & Binary Interactions</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- Section 3: Cross-Validated Benchmarks (Static Tables) -->
+        <div>
+            <!-- Connector Icon -->
+            <div class="flex justify-center mb-[-24px] relative z-20">
+                <div class="bg-white p-2 rounded-full border-2 border-teal-200 shadow-md">
+                    <i data-lucide="git-merge" class="text-teal-500 w-8 h-8 transform rotate-180"></i>
+                </div>
+            </div>
+            
+            <div class="bg-teal-50/40 border-2 border-teal-100 rounded-2xl pt-12 pb-10 px-4 sm:px-8 flex flex-col items-center">
+                
+                <div class="flex items-center bg-white px-6 py-2.5 rounded-full border border-teal-200 shadow-sm mb-10">
+                    <i data-lucide="shield-check" class="text-teal-600 w-5 h-5 mr-2"></i>
+                    <span class="font-bold text-sm sm:text-base text-teal-900 tracking-wide uppercase">Cross-Validated Benchmarks</span>
+                </div>
+
+                <!-- Table 1: Linear -->
+                <div class="mb-8 w-full max-w-4xl">
+                    <div class="flex items-center mb-3 text-slate-700">
+                        <i data-lucide="activity" class="w-5 h-5 mr-2 text-teal-600"></i>
+                        <h4 class="font-bold text-lg">Linear Framework</h4>
+                    </div>
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="min-w-[600px]">
+                            <div class="grid grid-cols-4 bg-slate-50 border-b border-slate-200 py-3 px-4">
+                                <div class="font-bold text-slate-400 text-sm tracking-wider uppercase"></div>
+                                <div class="text-center font-bold text-slate-500 text-sm tracking-wider uppercase">RMSE <span class="text-[10px] text-rose-500 block font-black">↓ ERROR</span></div>
+                                <div class="text-center font-bold text-slate-500 text-sm tracking-wider uppercase">Adj. R² <span class="text-[10px] text-emerald-500 block font-black">↑ FIT</span></div>
+                                <div class="text-center font-bold text-slate-500 text-sm tracking-wider uppercase">BIC <span class="text-[10px] text-rose-500 block font-black">↓ COMPLEXITY</span></div>
+                            </div>
+                            
+                            <div class="grid grid-cols-4 border-b border-slate-100 py-3.5 px-4 items-center">
+                                <div class="font-bold text-orange-600 flex items-center whitespace-nowrap">
+                                    <span class="w-3 h-3 rounded-full bg-orange-400 mr-2 shrink-0"></span> Additive Baseline
+                                </div>
+                                <div class="text-center font-mono text-lg font-semibold text-slate-600">1.2144</div>
+                                <div class="text-center font-mono text-lg font-semibold text-slate-600">0.3351</div>
+                                <div class="text-center font-mono text-lg font-semibold text-slate-600">1,039,391</div>
+                            </div>
+
+                            <div class="grid grid-cols-4 py-3.5 px-4 items-center bg-indigo-50/30">
+                                <div class="font-bold text-indigo-600 flex items-center whitespace-nowrap">
+                                    <span class="w-3 h-3 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network Interaction
+                                </div>
+                                <div class="text-center font-mono text-xl font-bold text-emerald-600">1.2034</div>
+                                <div class="text-center font-mono text-xl font-bold text-emerald-600">0.3470</div>
+                                <div class="text-center font-mono text-xl font-bold text-emerald-600">1,032,536</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table 2: Ordinal -->
+                <div class="mb-8 w-full max-w-4xl">
+                    <div class="flex items-center mb-3 text-slate-700">
+                        <i data-lucide="bar-chart-horizontal" class="w-5 h-5 mr-2 text-teal-600"></i>
+                        <h4 class="font-bold text-lg">Ordinal Framework</h4>
+                    </div>
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="min-w-[600px]">
+                            <div class="grid grid-cols-4 bg-slate-50 border-b border-slate-200 py-3 px-4">
+                                <div class="font-bold text-slate-400 text-sm tracking-wider uppercase"></div>
+                                <div class="text-center font-bold text-slate-500 text-sm tracking-wider uppercase">RPS <span class="text-[10px] text-rose-500 block font-black">↓ SCORE</span></div>
+                                <div class="text-center font-bold text-slate-500 text-sm tracking-wider uppercase">Log-Likelihood <span class="text-[10px] text-emerald-500 block font-black">↑ PROB</span></div>
+                                <div class="text-center font-bold text-slate-500 text-sm tracking-wider uppercase">AIC <span class="text-[10px] text-rose-500 block font-black">↓ INF. LOSS</span></div>
+                            </div>
+                            
+                            <div class="grid grid-cols-4 border-b border-slate-100 py-3.5 px-4 items-center">
+                                <div class="font-bold text-orange-600 flex items-center whitespace-nowrap">
+                                    <span class="w-3 h-3 rounded-full bg-orange-400 mr-2 shrink-0"></span> Additive Baseline
+                                </div>
+                                <div class="text-center font-mono text-lg font-semibold text-slate-600">0.131469</div>
+                                <div class="text-center font-mono text-lg font-semibold text-slate-600">-270,355.4</div>
+                                <div class="text-center font-mono text-lg font-semibold text-slate-600">540,732.8</div>
+                            </div>
+
+                            <div class="grid grid-cols-4 py-3.5 px-4 items-center bg-indigo-50/30">
+                                <div class="font-bold text-indigo-600 flex items-center whitespace-nowrap">
+                                    <span class="w-3 h-3 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network Interaction
+                                </div>
+                                <div class="text-center font-mono text-xl font-bold text-emerald-600">0.131446</div>
+                                <div class="text-center font-mono text-xl font-bold text-emerald-600">-270,248.7</div>
+                                <div class="text-center font-mono text-xl font-bold text-emerald-600">540,541.4</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table 3: Binary -->
+                <div class="w-full max-w-4xl">
+                    <div class="flex items-center mb-3 text-slate-700">
+                        <i data-lucide="binary" class="w-5 h-5 mr-2 text-teal-600"></i>
+                        <h4 class="font-bold text-lg">Binary Framework</h4>
+                    </div>
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="min-w-[600px]">
+                            <div class="grid grid-cols-4 bg-slate-50 border-b border-slate-200 py-3 px-4">
+                                <div class="font-bold text-slate-400 text-sm tracking-wider uppercase"></div>
+                                <div class="text-center font-bold text-slate-500 text-sm tracking-wider uppercase">Accuracy <span class="text-[10px] text-emerald-500 block font-black">↑ BIAS</span></div>
+                                <div class="text-center font-bold text-slate-500 text-sm tracking-wider uppercase">ROC-AUC <span class="text-[10px] text-emerald-500 block font-black">↑ ACCUM</span></div>
+                                <div class="text-center font-bold text-slate-500 text-sm tracking-wider uppercase">F1-Score <span class="text-[10px] text-emerald-500 block font-black">↑ BAL</span></div>
+                            </div>
+                            
+                            <div class="grid grid-cols-4 border-b border-slate-100 py-3.5 px-4 items-center">
+                                <div class="font-bold text-orange-600 flex items-center whitespace-nowrap">
+                                    <span class="w-3 h-3 rounded-full bg-orange-400 mr-2 shrink-0"></span> Additive Baseline
+                                </div>
+                                <!-- Binary framework winner is Additive Baseline -->
+                                <div class="text-center font-mono text-xl font-bold text-emerald-600">0.747191</div>
+                                <div class="text-center font-mono text-xl font-bold text-emerald-600">0.795362</div>
+                                <div class="text-center font-mono text-xl font-bold text-emerald-600">0.794392</div>
+                            </div>
+
+                            <div class="grid grid-cols-4 py-3.5 px-4 items-center bg-indigo-50/30">
+                                <div class="font-bold text-indigo-600 flex items-center whitespace-nowrap">
+                                    <span class="w-3 h-3 rounded-full bg-indigo-500 mr-2 shrink-0"></span> Network Interaction
+                                </div>
+                                <div class="text-center font-mono text-lg font-semibold text-slate-600">0.745810</div>
+                                <div class="text-center font-mono text-lg font-semibold text-slate-600">0.794334</div>
+                                <div class="text-center font-mono text-lg font-semibold text-slate-600">0.794080</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Simple initialization to render the static icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
