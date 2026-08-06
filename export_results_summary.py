@@ -524,39 +524,86 @@ def export_brant_test(data, base_centered_cols):
     The Brant test fits J−1 binary logistic regressions (one per ordinal
     threshold) and compares coefficients.  A χ² statistic is computed for
     each predictor to test whether the proportional-odds assumption holds.
+    Uses the exact Brant (1990) joint covariance formulation.
     """
-    logger.info("Exporting brant_test.csv …")
+    logger.info("Exporting brant_test.csv with proper Brant (1990) Wald test ...")
+    import statsmodels.api as sm
+    from scipy.stats import chi2 as chi2_dist
 
     y = data["rating"].astype(int)
     X = data[base_centered_cols]
-
-    # run_brant_test returns a DataFrame: rows = features (incl. const),
-    # columns = "Y > 1", "Y > 2", "Y > 3", "Y > 4".
-    brant_df = run_brant_test(y, X)
-
+    X_const = sm.add_constant(X)
+    X_vals = X_const.values
+    
+    unique_vals = sorted(y.unique())
+    thresholds = unique_vals[:-1]
+    M = len(thresholds)
+    P = X_const.shape[1]
+    
+    models = []
+    preds = {}
+    coefs = {}
+    info_invs = {}
+    
+    # 1. Fit separate models and get inverted information matrices
+    for t in thresholds:
+        y_bin = (y > t).astype(int)
+        model = sm.Logit(y_bin, X_const).fit(disp=False)
+        models.append(model)
+        p = model.predict(X_const).values
+        preds[t] = p
+        coefs[t] = model.params.values
+        W_jj = p * (1 - p)
+        info = (X_vals.T * W_jj) @ X_vals
+        try:
+            info_invs[t] = np.linalg.inv(info)
+        except np.linalg.LinAlgError:
+            info_invs[t] = np.linalg.pinv(info)
+            
+    # 2. Compute joint covariance of stacked coefficients
+    joint_cov = np.zeros((M * P, M * P))
+    for i, t_i in enumerate(thresholds):
+        for j, t_j in enumerate(thresholds):
+            t_min = min(t_i, t_j)
+            t_max = max(t_i, t_j)
+            p_min = preds[t_min]
+            p_max = preds[t_max]
+            
+            W_jk = p_max * (1 - p_min)
+            cross_info = (X_vals.T * W_jk) @ X_vals
+            
+            cov_ij = info_invs[t_min] @ cross_info @ info_invs[t_max]
+            if t_i > t_j:
+                cov_ij = cov_ij.T
+            joint_cov[i*P:(i+1)*P, j*P:(j+1)*P] = cov_ij
+            
+    # 3. Compute Brant test statistic for each variable
     rows = []
-    for term in base_centered_cols:
-        if term not in brant_df.index:
+    C = np.zeros((M - 1, M))
+    for i in range(M - 1):
+        C[i, i] = -1
+        C[i, i + 1] = 1
+        
+    for p_idx, term in enumerate(X_const.columns):
+        if term == "const":
             continue
-        coefs = brant_df.loc[term].values  # coefficients across thresholds
-        k = len(coefs)  # number of thresholds (J-1 = 4)
-
-        # Mean coefficient across thresholds
-        coef_mean = np.mean(coefs)
-
-        # Under H0 (proportional odds), all J-1 coefficients should be equal.
-        # Chi-square ≈ sum of squared deviations from the mean, scaled.
-        # Standard Brant approach: use the variance of the coefficients.
-        max_variation = np.max(coefs) - np.min(coefs)
-        coef_var = np.var(coefs, ddof=0)
-        chi2 = k * coef_var / (coef_mean ** 2 + 1e-12) * len(y)
-
-        # Degrees of freedom = J - 2 (number of free threshold contrasts)
-        df = k - 1
-
-        from scipy.stats import chi2 as chi2_dist
+            
+        term_coefs = np.array([coefs[t][p_idx] for t in thresholds])
+        indices = [p_idx + m * P for m in range(M)]
+        term_cov = joint_cov[np.ix_(indices, indices)]
+        
+        diff = C @ term_coefs
+        diff_cov = C @ term_cov @ C.T
+        
+        try:
+            diff_cov_inv = np.linalg.inv(diff_cov)
+        except np.linalg.LinAlgError:
+            diff_cov_inv = np.linalg.pinv(diff_cov)
+            
+        chi2 = diff.T @ diff_cov_inv @ diff
+        df = M - 1
         p_value = 1 - chi2_dist.cdf(chi2, df)
-
+        
         rows.append({
             "term": term,
             "chi2": chi2,
@@ -564,7 +611,7 @@ def export_brant_test(data, base_centered_cols):
             "p_value": p_value,
             "violates_at_005": p_value < 0.05,
         })
-
+        
     pd.DataFrame(rows).to_csv(
         os.path.join(OUTPUT_DIR, "brant_test.csv"), index=False
     )
