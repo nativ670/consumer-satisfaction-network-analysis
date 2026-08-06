@@ -3,6 +3,8 @@ data/*
 !data/.gitkeep
 *.csv
 *.json
+!glasso_test_graphs_output/*.json
+!results_export/*.json
 *.parquet
 
 # Python & Virtual Environments

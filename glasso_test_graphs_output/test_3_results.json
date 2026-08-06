@@ -1,0 +1,192 @@
+{
+    "test_name": "test_3",
+    "description": "lambda 0.0001 to 1; threshold 0",
+    "best_lambda": 0.0001,
+    "num_edges": 21,
+    "edges": [
+        {
+            "source": "smell/fragrance",
+            "target": "price/value",
+            "partial_correlation": 0.006,
+            "weight": 0.005967512719632601,
+            "sign": "positive"
+        },
+        {
+            "source": "smell/fragrance",
+            "target": "texture/consistency",
+            "partial_correlation": 0.0357,
+            "weight": 0.035715289879287036,
+            "sign": "positive"
+        },
+        {
+            "source": "smell/fragrance",
+            "target": "packaging",
+            "partial_correlation": 0.0289,
+            "weight": 0.028853303716407038,
+            "sign": "positive"
+        },
+        {
+            "source": "smell/fragrance",
+            "target": "ingredients",
+            "partial_correlation": 0.0777,
+            "weight": 0.07769062519324486,
+            "sign": "positive"
+        },
+        {
+            "source": "smell/fragrance",
+            "target": "effectiveness/results",
+            "partial_correlation": 0.0161,
+            "weight": 0.01607298214377256,
+            "sign": "positive"
+        },
+        {
+            "source": "smell/fragrance",
+            "target": "service/shipping",
+            "partial_correlation": 0.0046,
+            "weight": 0.004576479852918438,
+            "sign": "positive"
+        },
+        {
+            "source": "price/value",
+            "target": "texture/consistency",
+            "partial_correlation": 0.0141,
+            "weight": 0.0140562776136726,
+            "sign": "positive"
+        },
+        {
+            "source": "price/value",
+            "target": "packaging",
+            "partial_correlation": 0.0725,
+            "weight": 0.07250965690271353,
+            "sign": "positive"
+        },
+        {
+            "source": "price/value",
+            "target": "ingredients",
+            "partial_correlation": 0.0429,
+            "weight": 0.042939331636713166,
+            "sign": "positive"
+        },
+        {
+            "source": "price/value",
+            "target": "effectiveness/results",
+            "partial_correlation": 0.0234,
+            "weight": 0.023416070338434555,
+            "sign": "positive"
+        },
+        {
+            "source": "price/value",
+            "target": "service/shipping",
+            "partial_correlation": 0.0481,
+            "weight": 0.048050092666675495,
+            "sign": "positive"
+        },
+        {
+            "source": "texture/consistency",
+            "target": "packaging",
+            "partial_correlation": 0.0241,
+            "weight": 0.0240760803507748,
+            "sign": "positive"
+        },
+        {
+            "source": "texture/consistency",
+            "target": "ingredients",
+            "partial_correlation": 0.039,
+            "weight": 0.03901675329696738,
+            "sign": "positive"
+        },
+        {
+            "source": "texture/consistency",
+            "target": "effectiveness/results",
+            "partial_correlation": 0.0221,
+            "weight": 0.022127383629287085,
+            "sign": "positive"
+        },
+        {
+            "source": "texture/consistency",
+            "target": "service/shipping",
+            "partial_correlation": 0.0031,
+            "weight": 0.0030897978281654737,
+            "sign": "positive"
+        },
+        {
+            "source": "packaging",
+            "target": "ingredients",
+            "partial_correlation": 0.0841,
+            "weight": 0.0840919337018736,
+            "sign": "positive"
+        },
+        {
+            "source": "packaging",
+            "target": "effectiveness/results",
+            "partial_correlation": 0.0219,
+            "weight": 0.0218567690229268,
+            "sign": "positive"
+        },
+        {
+            "source": "packaging",
+            "target": "service/shipping",
+            "partial_correlation": 0.0574,
+            "weight": 0.05740423252931369,
+            "sign": "positive"
+        },
+        {
+            "source": "ingredients",
+            "target": "effectiveness/results",
+            "partial_correlation": 0.0639,
+            "weight": 0.0638894433016084,
+            "sign": "positive"
+        },
+        {
+            "source": "ingredients",
+            "target": "service/shipping",
+            "partial_correlation": 0.0403,
+            "weight": 0.04034328913258301,
+            "sign": "positive"
+        },
+        {
+            "source": "effectiveness/results",
+            "target": "service/shipping",
+            "partial_correlation": 0.0082,
+            "weight": 0.00824944370105271,
+            "sign": "positive"
+        }
+    ],
+    "nodes": [
+        {
+            "aspect": "smell/fragrance",
+            "avg_sentiment": 0.27570686095968433,
+            "frequency": 72158
+        },
+        {
+            "aspect": "price/value",
+            "avg_sentiment": 0.34498528024722874,
+            "frequency": 63233
+        },
+        {
+            "aspect": "texture/consistency",
+            "avg_sentiment": 0.30424287826724394,
+            "frequency": 14551
+        },
+        {
+            "aspect": "packaging",
+            "avg_sentiment": 0.09333876720819766,
+            "frequency": 118526
+        },
+        {
+            "aspect": "ingredients",
+            "avg_sentiment": 0.21260239422024682,
+            "frequency": 165558
+        },
+        {
+            "aspect": "effectiveness/results",
+            "avg_sentiment": 0.26091074642493106,
+            "frequency": 23900
+        },
+        {
+            "aspect": "service/shipping",
+            "avg_sentiment": 0.27830106218772566,
+            "frequency": 16666
+        }
+    ]
+}
