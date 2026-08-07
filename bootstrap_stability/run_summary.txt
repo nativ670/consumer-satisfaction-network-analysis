@@ -1,0 +1,27 @@
+BOOTSTRAP EDGE STABILITY SUMMARY
+================================
+Timestamp: 2026-08-07 15:30:59
+Bootstrap iterations (B): 1000
+Base seed: 42
+N per bootstrap: 322133
+Lambda grid size: 50
+
+STABLE EDGES (inclusion >= 0.90)
+----------------------------------------
+effectiveness/results <-> ingredients: freq=1.000, mean_pcorr=0.0516
+ingredients <-> smell/fragrance: freq=1.000, mean_pcorr=0.0544
+ingredients <-> texture/consistency: freq=1.000, mean_pcorr=0.0295
+ingredients <-> service/shipping: freq=1.000, mean_pcorr=0.0310
+ingredients <-> packaging: freq=1.000, mean_pcorr=0.0776
+packaging <-> price/value: freq=1.000, mean_pcorr=0.0649
+packaging <-> service/shipping: freq=1.000, mean_pcorr=0.0548
+smell/fragrance <-> texture/consistency: freq=1.000, mean_pcorr=0.0270
+price/value <-> service/shipping: freq=1.000, mean_pcorr=0.0372
+packaging <-> smell/fragrance: freq=0.995, mean_pcorr=0.0231
+
+UNSTABLE EDGES (in original network but inclusion < 0.90)
+------------------------------------------------------------
+packaging <-> texture/consistency: freq=0.862, mean_pcorr=0.0215
+
+NEAR-THRESHOLD EDGES (not in original network but inclusion >= 0.50)
+----------------------------------------------------------------------

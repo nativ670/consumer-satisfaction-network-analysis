@@ -5,6 +5,7 @@ data/*
 *.json
 !glasso_test_graphs_output/*.json
 !results_export/*.json
+!bootstrap_stability/*.csv
 *.parquet
 
 # Python & Virtual Environments
